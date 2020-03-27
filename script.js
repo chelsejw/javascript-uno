@@ -1,17 +1,10 @@
-var defaultColors = [`red`, `blue`, `yellow`, `green`];
+var defaultColors = [`red`, `blue`, `gold`, `green`];
 const colorCardValues = [1, 2, 3, 4, 5, 6, 7, 8, 9, `skip`, `reverse`, `+2`]
-
-var object = {
-    type: `color/wild`,
-    color: ``,
-}
-
-
 //The card pile that players can get cards from.
 var cardPile = [];
-
 var playerDeck = [];
 var computerDeck = [];
+var cardsInPlay = [];
 
 function generateDeck(colorChoices) {
     //Generate numbercards 1-9 in 4 colors. (36 cards)
@@ -67,9 +60,11 @@ function givePlayersDeck(num) {
         var randomIndex1 = getRandomInt(cardPile.length)
         var randomCard1 = cardPile[randomIndex1];
         playerDeck.push(randomCard1);
+        cardPile.splice(randomIndex1, 1);
         var randomIndex2 = getRandomInt(cardPile.length)
         var randomCard2 = cardPile[randomIndex2];
         computerDeck.push(randomCard2)
+        cardPile.splice(randomIndex2, 1);
     }
 
     console.log(playerDeck);
