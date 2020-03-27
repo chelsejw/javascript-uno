@@ -6,6 +6,7 @@ var object = {
     color: ``,
 }
 
+
 //The card pile that players can get cards from.
 var cardPile = [];
 
@@ -60,10 +61,9 @@ function getRandomInt(max) {
 }
 
 function givePlayersDeck(num) {
+  var deckLength = num;
 
-  var startingCardsLength = num;
-
-    for (var i= 0; i < startingCardsLength; i++) {
+    for (var i= 0; i < deckLength; i++) {
       var randomIndex1 = getRandomInt(cardPile.length)
       var randomCard1 = cardPile[randomIndex1];
       playerDeck.push(randomCard1);
@@ -74,5 +74,40 @@ function givePlayersDeck(num) {
 
     console.log(playerDeck);
     console.log(computerDeck);
+}
+
+function renderPlayerDeck(){
+
+}
+
+function renderComputerDeck(){
+
+  for (var i=0; i < computerDeck.length; i++) {
+    console.log(`this loop ran for the ${i}th time`)
+      var cardContainer = document.createElement('div');
+      cardContainer.classList.add('card-container');
+      var backCard = document.createElement('div');
+      backCard.classList.add('card');
+      backCard.classList.add('back-card');
+      var backCardRing = document.createElement('div');
+      backCardRing.classList.add('back-ring');
+      backCardRing.classList.add('card-ring');
+      var unoText = document.createElement('div');
+      unoText.classList.add('back-middle')
+      unoText.classList.add('middle')
+      unoText.innerText = "UNO";
+
+      cardContainer.appendChild(backCard);
+      backCard.appendChild(backCardRing);
+      backCard.appendChild(unoText);
+
+      document.getElementById('computer-deck').appendChild(cardContainer);
+  }
+}
+
+function renderPlayerCard(type, value, color) {
+
+  var newCard = document.createElement('div');
+  newCard.classList.add('card-container');
 
 }
