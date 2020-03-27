@@ -59,9 +59,9 @@ function getRandomInt(max) {
     return Math.floor(Math.random() * Math.floor(max));
 }
 
-function givePlayersDeck() {
+function givePlayersDeck(num) {
 
-  var startingCardsLength = 7
+  var startingCardsLength = num;
 
     for (var i= 0; i < startingCardsLength; i++) {
       var randomIndex1 = getRandomInt(cardPile.length)
