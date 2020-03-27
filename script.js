@@ -4,7 +4,7 @@ const colorCardValues = [1, 2, 3, 4, 5, 6, 7, 8, 9, `skip`, `reverse`, `+2`]
 var cardPile = [];
 var playerDeck = [];
 var computerDeck = [];
-var cardsInPlay = [];
+var cardInPlay = null;
 
 function generateDeck(colorChoices) {
     //Generate numbercards 1-9 in 4 colors. (36 cards)
@@ -66,9 +66,25 @@ function givePlayersDeck(num) {
         computerDeck.push(randomCard2)
         cardPile.splice(randomIndex2, 1);
     }
+    var starterCard = cardPile.splice(getRandomInt(cardPile.length), 1);
+    cardInPlay = starterCard
+    renderCardInPlay(cardInPlay);
+}
 
-    console.log(playerDeck);
-    console.log(computerDeck);
+function renderCardInPlay(latestCard) {
+    var cardInPlayDisplay = document.getElementById('cards-in-play')
+    var card = latestCard[0]
+    var cardType = card.type;
+    var cardColor = card.color;
+    var cardValue = card.value;
+    if (cardType === `wild`) {
+        var newCard = renderWildCard(cardValue);
+    } else if (cardType === `color`) {
+        var newCard = renderColorCard(cardValue, cardColor)
+    }
+    newCard.id = `${cardColor}-${cardValue}-${cardType}`
+    newCard.addEventListener(`click`, handleCardClick)
+    cardInPlayDisplay.appendChild(newCard);
 }
 
 function renderPlayerDeck() {
@@ -94,7 +110,13 @@ function renderPlayerDeck() {
 }
 
 function handleCardClick() {
-    return console.log(`i got clicked`);
+    var cardInfo = this.id.split("-")
+    var card = {
+        type: cardInfo[2],
+        color: cardInfo[0],
+        value: cardInfo[1]
+    }
+    console.log(card)
 }
 
 function renderComputerDeck() {
