@@ -16,226 +16,46 @@
         <h1>JAVASCRIPT UNO</h1>
     </header>
 
+    <!--CARDS IN PLAY DISPLAY-->
 
-<h2 id="status-display">latest card played: <span id="latest-card">red 5</span></h2>
-  <div id="cards-in-play" class="deck">
-      <div class="card-container" id="latest-card">
-          <div class="card">
-              <div class="number top-left">
-                  5
-              </div>
-              <div class="card-ring">
-              </div>
-              <div class="number-middle middle">
-                  5
-              </div>
-              <div class="number bottom-right">
-                  5
-              </div>
-          </div>
-      </div>
-
-  </div>
-
-  <div id="game-body">
-  <div id="player-deck" class="deck">
-    <h2>Your Deck</h2>
-      <div class="card-container">
-          <div class="card">
-              <div class="number top-left">
-                  5
-              </div>
-              <div class="card-ring">
-              </div>
-              <div class="number-middle middle">
-                  5
-              </div>
-              <div class="number bottom-right">
-                  5
-              </div>
-          </div>
-      </div>
-
-      <div class="card-container">
-          <div class="card">
-              <div class="draw top-left">
-                  +2
-              </div>
-              <div class="card-ring">
-              </div>
-              <div class="draw-middle middle">
-                  +2
-              </div>
-              <div class="draw bottom-right">
-                  +2
-              </div>
-          </div>
-      </div>
-
-      <div class="card-container">
+    <div id="cards-in-play" class="deck">
+        <h2 id="status-display">latest card played: <span id="latest-card"></span></h2>
 
 
-          <div class="card">
-              <div class="action top-left">
-                  <i class="fas fa-ban"></i>
-              </div>
-              <div class="card-ring">
-              </div>
-              <div class="action-middle middle">
-                  <i class="fas fa-ban"></i>
-              </div>
-              <div class="action bottom-right">
-                  <i class="fas fa-ban"></i>
-              </div>
-          </div>
-      </div>
+    </div>
+
+    <!--GAME BODY CONSISTS OF TWO COLUMNS-->
+
+    <div id="game-body">
+
+        <div id="col-left">
 
 
+          <!--PLAYER DECK HERE-->
+            <div id="player-deck" class="deck">
+                <h2>Your Deck</h2>
 
-      <div class="card-container">
-          <div class="card">
-              <div class="action top-left">
-                  <i class="fas fa-random"></i>
-
-              </div>
-              <div class="card-ring">
-              </div>
-              <div class="action-middle middle">
-                  <i class="fas fa-random"></i>
-
-              </div>
-              <div class="action bottom-right">
-                  <i class="fas fa-random"></i>
-
-              </div>
-          </div>
-
-      </div>
+            </div>
+        </div>
 
 
-      <div class="card-container">
-          <div class="card wild">
-              <div class="wild top-left">
-                  +4
-              </div>
-              <div class="card-ring wild-ring">
-              </div>
-              <div class="wild-middle middle">
-                  <div class="wild-icon wild-bottom">
-                      <div class="wild-icon-inner"></div>
-                  </div>
-                  <div class="wild-icon wild-right">
-                      <div class="wild-icon-inner"></div>
-                  </div>
-                  <div class="wild-icon wild-top">
-                      <div class="wild-icon-inner"></div>
-                  </div>
-                  <div class="wild-icon wild-left">
-                      <div class="wild-icon-inner"></div>
-                  </div>
-
-              </div>
-              <div class="wild bottom-right">
-                  +4
-              </div>
-          </div>
-      </div>
-
-
-  </div>
-
-
-  <div id="opponent-deck" class="deck">
-    <h2>Opponent Deck</h2>
-
-      <div class="card-container">
-          <div class="card back-card">
-
-              <div class="back-ring card-ring">
-              </div>
-              <div class="back-middle middle">
-                  <span id="uno-icon">UNO</span>
-              </div>
-
-          </div>
-      </div>
-      <div class="card-container">
-          <div class="card back-card">
-
-              <div class="back-ring card-ring">
-              </div>
-              <div class="back-middle middle">
-                  <span id="uno-icon">UNO</span>
-              </div>
-
-          </div>
-      </div>
-      <div class="card-container">
-          <div class="card back-card">
-
-              <div class="back-ring card-ring">
-              </div>
-              <div class="back-middle middle">
-                  <span id="uno-icon">UNO</span>
-              </div>
-
-          </div>
-      </div>
-      <div class="card-container">
-          <div class="card back-card">
-
-              <div class="back-ring card-ring">
-              </div>
-              <div class="back-middle middle">
-                  <span id="uno-icon">UNO</span>
-              </div>
-
-          </div>
-      </div>
-      <div class="card-container">
-          <div class="card back-card">
-
-              <div class="back-ring card-ring">
-              </div>
-              <div class="back-middle middle">
-                  <span id="uno-icon">UNO</span>
-              </div>
-
-          </div>
-      </div>
-      <div class="card-container">
-          <div class="card back-card">
-
-              <div class="back-ring card-ring">
-              </div>
-              <div class="back-middle middle">
-                  <span id="uno-icon">UNO</span>
-              </div>
-
-          </div>
-      </div>
-      <div class="card-container">
-          <div class="card back-card">
-
-              <div class="back-ring card-ring">
-              </div>
-              <div class="back-middle middle">
-                  <span id="uno-icon">UNO</span>
-              </div>
-
-          </div>
-      </div>
-
-  </div>
-
-
-</div>
+        <!--OPPONENT DECK HERE-->
+        <div id="col-right">
+            <div id="opponent-deck" class="deck">
+                <h2>Opponent Deck</h2>
+            </div>
+        </div>
+    </div>
 
 
     <footer>
-      Best viewed on Chrome.
-      <br />Copyright Chelsea Ee. 2020
+        Best viewed on Chrome.
+        <br />Copyright Chelsea Ee. 2020
     </footer>
+
+    <script type="text/javascript" src="script.js">
+
+    </script>
 </body>
 
 </html>

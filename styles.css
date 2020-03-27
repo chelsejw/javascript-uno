@@ -38,7 +38,17 @@ header {
 
 #game-body {
 	display: flex;
-	flex-direction: column;
+	flex-direction: row;
+	justify-content: center;
+	align-items: top;
+}
+
+#col-left {
+	flex: 1
+}
+
+#col-right {
+	flex: 1
 }
 
 #cards-in-play {
@@ -49,6 +59,7 @@ header {
 }
 
 #player-deck {
+	margin: 3%;
 }
 
 #opponent-deck {
