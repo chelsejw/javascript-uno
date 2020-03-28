@@ -6,6 +6,14 @@ var playerDeck = [];
 var computerDeck = [];
 var cardInPlay = null;
 
+var validMove = function() {
+
+    var cardToMatch = cardInPlay[0]
+    console.log(`this card is ${this.id}`)
+    console.log(`card in play is ${cardToMatch}`);
+
+}
+
 function generateDeck(colorChoices) {
     //Generate numbercards 1-9 in 4 colors. (36 cards)
     for (var colorIndex = 0; colorIndex < colorChoices.length; colorIndex++) {
@@ -67,28 +75,43 @@ function givePlayersDeck(num) {
         cardPile.splice(randomIndex2, 1);
     }
     var starterCard = cardPile.splice(getRandomInt(cardPile.length), 1);
-    cardInPlay = starterCard
+    cardInPlay = starterCard[0]
     renderCardInPlay(cardInPlay);
 }
 
-function renderCardInPlay(latestCard) {
-    var cardInPlayDisplay = document.getElementById('cards-in-play')
-    var card = latestCard[0]
-    var cardType = card.type;
-    var cardColor = card.color;
-    var cardValue = card.value;
+function renderCardInPlay() {
+
+var cardsInPlayDiv = document.getElementById('cards-in-play')
+cardsInPlayDiv.innerText = "";
+
+    var cardType = cardInPlay.type;
+    var cardColor = cardInPlay.color;
+    var cardValue = cardInPlay.value;
+
+    var statusDisplay = document.createElement("h2");
+    statusDisplay.id = "status-display";
+    statusDisplay.innerText = "Latest Card Played: "
+
+    var latestCardSpan = document.createElement('span')
+    latestCardSpan.innerHTML = `${cardColor} ${cardValue}`
+    statusDisplay.appendChild(latestCardSpan)
+    cardsInPlayDiv.appendChild(statusDisplay);
+
     if (cardType === `wild`) {
         var newCard = renderWildCard(cardValue);
     } else if (cardType === `color`) {
         var newCard = renderColorCard(cardValue, cardColor)
     }
-    newCard.id = `${cardColor}-${cardValue}-${cardType}`
-    newCard.addEventListener(`click`, handleCardClick)
-    cardInPlayDisplay.appendChild(newCard);
+    newCard.id = `${cardType}-${cardColor}-${cardValue}`
+    cardsInPlayDiv.appendChild(newCard);
 }
 
 function renderPlayerDeck() {
     var playerDeckDisplay = document.getElementById('player-deck')
+    playerDeckDisplay.innerText = "";
+    var yourDeckH2 = document.createElement('h2')
+    yourDeckH2.innerText = "Your Deck";
+    playerDeckDisplay.appendChild(yourDeckH2);
     for (var i = 0; i < playerDeck.length; i++) {
 
         //Loop through the player deck and get the following values.
@@ -96,6 +119,7 @@ function renderPlayerDeck() {
         var cardType = currentCard.type;
         var cardColor = currentCard.color;
         var cardValue = currentCard.value;
+        var cardIndex = i;
 
         //If card type is wild, render wildcard accordingly.
         if (cardType === `wild`) {
@@ -103,20 +127,54 @@ function renderPlayerDeck() {
         } else if (cardType === `color`) {
             var card = renderColorCard(cardValue, cardColor)
         }
-        card.id = `${cardColor}-${cardValue}-${cardType}`
+        card.id = `${cardType}-${cardColor}-${cardValue}-${cardIndex}`
         card.addEventListener(`click`, handleCardClick)
         playerDeckDisplay.appendChild(card);
     }
 }
 
 function handleCardClick() {
-    var cardInfo = this.id.split("-")
-    var card = {
-        type: cardInfo[2],
-        color: cardInfo[0],
-        value: cardInfo[1]
+    var playerCardValues = this.id.split("-")
+    var playerType = playerCardValues[0]
+    var playerColor = playerCardValues[1]
+    var playerValue = playerCardValues[2]
+    var playerIndex = playerCardValues[3]
+
+    //If player value +2 or +4 (these are considered numbers), do not parseInt. Else if it's a number, parseInt.
+    if (playerValue===`+2` || playerValue===`+4`) {
+      playerValue;
+    } else if (!isNaN(playerValue)) {
+      playerValue = parseInt(playerValue)
     }
-    console.log(card)
+    var playerCard = {
+      type: playerType,
+      color: playerColor,
+      value: playerValue
+    }
+    var pileColor = cardInPlay.color;
+    var pileType = cardInPlay.type;
+    var pileValue = cardInPlay.value;
+
+    if (playerValue===pileValue) {
+      cardInPlay = playerCard;
+      playerDeck.splice(playerIndex, 1)
+      renderCardInPlay();
+      renderPlayerDeck();
+    } else if (playerColor===pileColor) {
+      cardInPlay = playerCard;
+      playerDeck.splice(playerIndex, 1)
+      renderCardInPlay();
+      renderPlayerDeck();
+    } else if (playerType===`wild`) {
+      cardInPlay = playerCard;
+      playerDeck.splice(playerIndex, 1)
+      renderCardInPlay();
+      renderPlayerDeck();
+    } else {
+      console.log(`you can't play that cardPile.`)
+    }
+
+
 }
 
 function renderComputerDeck() {

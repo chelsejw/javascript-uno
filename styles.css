@@ -44,7 +44,8 @@ header {
 }
 
 #col-left {
-	flex: 1
+	flex: 2;
+	border: 1px solid #3b6978
 }
 
 #col-right {
@@ -73,7 +74,6 @@ header {
 	font-family: "Arial", sans-serif;
 	margin: 10px;
 	display: inline-block;
-	z-index: 9999;
 	width: 120px;
 	height: 180px;
 	position: relative;
@@ -90,7 +90,6 @@ header {
 	border-radius: 5px;
 	border: 10px solid white;
 	color: white;
-	display: inline-block;
 }
 
 .card-ring {
