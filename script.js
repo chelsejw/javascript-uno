@@ -169,7 +169,7 @@ function handleCardClick() {
       renderPlayerDeck();
     } else if (playerType===`wild`) {
       renderWildColorPicker();
-      playerCard.color = colorPicked;
+      playerCard.color = colorPicked();
       if (confirmWildColor) {
         cardInPlay = playerCard;
         playerDeck.splice(playerIndex, 1)
