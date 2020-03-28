@@ -1,8 +1,7 @@
 body {
 	font-family: 'Nunito', sans-serif;
   text-align: center;
-	background-color: #204051;
-	color: #cae8d5;
+	color: #fffdf6;
 /* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
 }
 
@@ -12,17 +11,17 @@ h1,h2 {
 }
 
 h1 {
-	font-size: 3rem;
-	color: #84a9ac;
+	font-size: 2rem;
+	color: #46413B;
 }
 
 h2 {
-	font-size: 2rem;
-	color: #3b6978;
+	font-size: 1.4rem;
+	color: #46413B;
 }
 
-#latest-card{
-	color: #cae8d5
+.latest-card{
+	color: #BEBBB6
 }
 
 header {
@@ -35,6 +34,56 @@ header {
 	letter-spacing: 3px;
 }
 
+.color-picker{
+	border-radius: 50px;
+	padding: 20px;
+}
+
+.color-row {
+	text-align: center;
+}
+
+.color-icon {
+	width: 50px;
+	height: 50px;
+	border-radius: 10px;
+	margin: 10px;
+	border: 1px solid #2b2d2f;
+	box-shadow: 3px 6px rgba(0,0,0,0.4);
+	transition-duration: 0.5s;
+	position: relative;
+}
+
+.hide {
+	display: none;
+}
+
+
+.color-icon:focus, .color-icon:hover{
+	transform: rotate(90deg);
+	box-shadow: none;
+	outline: none;
+	border-radius: 100%;
+}
+
+#confirm {
+	display: block;
+	font-size: 4rem;
+	padding: 5px 40px;
+	margin: 20px auto;
+	border: none;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	background-color: inherit;
+	position: relative;
+	transition-duration: 0.2s;
+	color: grey;
+}
+
+#confirm:hover, #confirm:focus {
+	outline: none;
+	color: green;
+}
 
 #game-body {
 	display: flex;
@@ -44,7 +93,7 @@ header {
 }
 
 #col-left {
-	flex: 2;
+	flex: 1;
 }
 
 #col-right {
@@ -78,7 +127,7 @@ header {
 	position: relative;
 	border-radius: 8px;
 	border: 2px solid black;
-	transition-duration: 0.2s;
+	transition-duration: 0.3s;
 	box-shadow: rgba(0, 0, 0, 0.8) 6px 6px 10px;
 }
 
@@ -137,6 +186,8 @@ header {
 	box-shadow: rgba(0, 0, 0, 0.9) 3px 3px 5px;
 	left: 3px;
 	top: 3px;
+	transform: rotate(10deg);
+
 }
 
 .number-middle {

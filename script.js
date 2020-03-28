@@ -93,6 +93,8 @@ cardsInPlayDiv.innerText = "";
     statusDisplay.innerText = "Latest Card Played: "
 
     var latestCardSpan = document.createElement('span')
+    latestCardSpan.classList.add(`latest-card`);
+
     latestCardSpan.innerHTML = `${cardColor} ${cardValue}`
     statusDisplay.appendChild(latestCardSpan)
     cardsInPlayDiv.appendChild(statusDisplay);
@@ -166,10 +168,14 @@ function handleCardClick() {
       renderCardInPlay();
       renderPlayerDeck();
     } else if (playerType===`wild`) {
-      cardInPlay = playerCard;
-      playerDeck.splice(playerIndex, 1)
-      renderCardInPlay();
-      renderPlayerDeck();
+      renderWildColorPicker();
+      playerCard.color = colorPicked;
+      if (confirmWildColor) {
+        cardInPlay = playerCard;
+        playerDeck.splice(playerIndex, 1)
+        renderCardInPlay();
+        renderPlayerDeck();
+      }
     } else {
       console.log(`you can't play that cardPile.`)
     }
@@ -301,6 +307,44 @@ function createDiv(classes) {
     var newDiv = document.createElement('div')
     newDiv.classList.value = classes
     return newDiv
+}
+
+
+function renderWildColorPicker() {
+  var colorRow = createDiv(`color-row`)
+  for (var iconNo=0; iconNo < defaultColors.length; iconNo++){
+    var colorIcon = document.createElement('button');
+    colorIcon.classList.add('color-icon');
+    colorIcon.style.backgroundColor = defaultColors[iconNo];
+    colorIcon.id = defaultColors[iconNo];
+    colorIcon.addEventListener('click', colorPicked)
+    colorRow.appendChild(colorIcon);
+  }
+
+  var confirmBtn = document.getElementById('confirm')
+  confirmBtn.addEventListener('click', confirmWildColor);
+
+  var container = document.querySelector('.color-picker');
+
+  container.insertBefore(colorRow, container.lastElementChild);
+  toggleDisplay(container);
+}
+
+
+function toggleDisplay(element) {
+  if (element.classList.value.includes('hide')) {
+    element.classList.remove('hide');
+  } else {
+    element.classList.add('hide')
+  }
+}
+
+var colorPicked = function(){
+  return this.id
+}
+
+var confirmWildColor = function(){
+  return true;
 }
 
 generateDeck(defaultColors);
