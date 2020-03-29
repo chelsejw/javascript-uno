@@ -103,7 +103,7 @@ header {
 #cards-in-play {
 }
 
-#latest-card {
+.latest-card-image {
 	transform: rotate(30deg);
 }
 

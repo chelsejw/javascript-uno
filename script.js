@@ -6,6 +6,8 @@ var playerDeck = [];
 var computerDeck = [];
 var cardInPlay = null;
 
+var colorPicker = document.querySelector('.color-picker')
+
 var validMove = function() {
 
     var cardToMatch = cardInPlay[0]
@@ -81,8 +83,8 @@ function givePlayersDeck(num) {
 
 function renderCardInPlay() {
 
-var cardsInPlayDiv = document.getElementById('cards-in-play')
-cardsInPlayDiv.innerText = "";
+    var cardsInPlayDiv = document.getElementById('cards-in-play')
+    cardsInPlayDiv.innerText = "";
 
     var cardType = cardInPlay.type;
     var cardColor = cardInPlay.color;
@@ -101,8 +103,10 @@ cardsInPlayDiv.innerText = "";
 
     if (cardType === `wild`) {
         var newCard = renderWildCard(cardValue);
+        newCard.classList.add('latest-card-image')
     } else if (cardType === `color`) {
         var newCard = renderColorCard(cardValue, cardColor)
+        newCard.classList.add('latest-card-image')
     }
     newCard.id = `${cardType}-${cardColor}-${cardValue}`
     cardsInPlayDiv.appendChild(newCard);
@@ -143,41 +147,47 @@ function handleCardClick() {
     var playerIndex = playerCardValues[3]
 
     //If player value +2 or +4 (these are considered numbers), do not parseInt. Else if it's a number, parseInt.
-    if (playerValue===`+2` || playerValue===`+4`) {
-      playerValue;
+    if (playerValue === `+2` || playerValue === `+4`) {
+        playerValue;
     } else if (!isNaN(playerValue)) {
-      playerValue = parseInt(playerValue)
+        playerValue = parseInt(playerValue)
     }
     var playerCard = {
-      type: playerType,
-      color: playerColor,
-      value: playerValue
+        type: playerType,
+        color: playerColor,
+        value: playerValue
     }
     var pileColor = cardInPlay.color;
     var pileType = cardInPlay.type;
     var pileValue = cardInPlay.value;
 
-    if (playerValue===pileValue) {
-      cardInPlay = playerCard;
-      playerDeck.splice(playerIndex, 1)
-      renderCardInPlay();
-      renderPlayerDeck();
-    } else if (playerColor===pileColor) {
-      cardInPlay = playerCard;
-      playerDeck.splice(playerIndex, 1)
-      renderCardInPlay();
-      renderPlayerDeck();
-    } else if (playerType===`wild`) {
-      renderWildColorPicker();
-      playerCard.color = colorPicked();
-      if (confirmWildColor) {
+    if (playerType === `wild`) {
+      console.log(`At stage: checking player type, isColorSelected = ${isColorSelected}`)
+
+        var isColorSelected = false
+        renderWildColorPicker();
+        toggleDisplay(colorPicker);
+        var chosenColor = colorPicked;
+        var confirmed = confirmWildColor;
+        if (confirmed) {
+          playerCard.color = colorPicked;
+          cardInPlay = playerCard;
+          playerDeck.splice(playerIndex, 1)
+          renderCardInPlay();
+          renderPlayerDeck();
+        }
+    } else if (playerValue === pileValue) {
         cardInPlay = playerCard;
         playerDeck.splice(playerIndex, 1)
         renderCardInPlay();
         renderPlayerDeck();
-      }
+    } else if (playerColor === pileColor) {
+        cardInPlay = playerCard;
+        playerDeck.splice(playerIndex, 1)
+        renderCardInPlay();
+        renderPlayerDeck();
     } else {
-      console.log(`you can't play that cardPile.`)
+        console.log(`you can't play that cardPile.`)
     }
 
 
@@ -311,43 +321,70 @@ function createDiv(classes) {
 
 
 function renderWildColorPicker() {
-  var colorRow = createDiv(`color-row`)
-  for (var iconNo=0; iconNo < defaultColors.length; iconNo++){
-    var colorIcon = document.createElement('button');
-    colorIcon.classList.add('color-icon');
-    colorIcon.style.backgroundColor = defaultColors[iconNo];
-    colorIcon.id = defaultColors[iconNo];
-    colorIcon.addEventListener('click', colorPicked)
-    colorRow.appendChild(colorIcon);
-  }
+    var colorRow = createDiv(`color-row`)
+    for (var iconNo = 0; iconNo < defaultColors.length; iconNo++) {
+        var colorIcon = document.createElement('button');
+        colorIcon.classList.add('color-icon');
+        colorIcon.style.backgroundColor = defaultColors[iconNo];
+        colorIcon.id = defaultColors[iconNo];
+        colorIcon.addEventListener('click', colorPicked)
+        colorRow.appendChild(colorIcon);
+    }
 
-  var confirmBtn = document.getElementById('confirm')
-  confirmBtn.addEventListener('click', confirmWildColor);
+    var confirmBtn = document.getElementById('confirm')
+    confirmBtn.addEventListener('click', confirmWildColor);
 
-  var container = document.querySelector('.color-picker');
+    var container = document.querySelector('.color-picker');
 
-  container.insertBefore(colorRow, container.lastElementChild);
-  toggleDisplay(container);
+    container.insertBefore(colorRow, container.lastElementChild);
 }
 
 
 function toggleDisplay(element) {
-  if (element.classList.value.includes('hide')) {
-    element.classList.remove('hide');
-  } else {
-    element.classList.add('hide')
-  }
+    if (element.classList.value.includes('hide')) {
+        element.classList.remove('hide');
+    } else {
+        element.classList.add('hide')
+    }
 }
 
-var colorPicked = function(){
-  return this.id
+var colorPicked = function () {
+    isColorSelected = true;
+    console.log(`At stage: colorPicked, isColorSelected = ${isColorSelected}`)
+    return this.id;
 }
 
-var confirmWildColor = function(){
-  return true;
+var confirmWildColor = function() {
+  console.log(`At stage: confirmWildColor(), isColorSelected = ${isColorSelected}`)
+
+    if (isColorSelected) {
+        return true;
+    } else {
+      console.log(`Color is not selected yet.`)
+      return false;
+    }
 }
 
+//Start game first for easier debugging.
 generateDeck(defaultColors);
 givePlayersDeck(7);
 renderComputerDeck();
 renderPlayerDeck();
+
+// THINGS LEFT TO WRITE: GAME FUNCTIONS
+// - Color picker for wildcards. (Set wildcard color to color icon selected, and play it only when color has been selected)
+// - Draw card from pile. (To be used when player/opponent wants to draw a card, and also when a draw-2 or draw-4 card is played)
+// - Wait for opponent move before player can make next move.
+// - During opponent's turn, check opponent deck for valid moves. Play the the first valid move available. If not, opponent must draw card from pile.
+// - If card pile is empty, regenerate a new pile with all the cards that have been played.
+// - Winning conditions
+
+// THINGS LEFT TO WRITE: DISPLAY/DOM
+// Start game setup: ask for player name & chosen colors (can choose default, or enter 4 custom colors)
+// Scoreboard
+
+
+//BONUS::
+// Countdown to click a button "Say Uno!" when player has only one card left, if button is not clicked in 10 seconds, it disappears & player has to draw 2.
+// Animate/add transitions for playing cards, waiting for opponent's turn, drawing cards from the pile
+//
