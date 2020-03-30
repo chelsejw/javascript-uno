@@ -37,18 +37,18 @@ h2 {
 	font-size: 1.5rem;
 	border: 1px solid black;
 	padding: 10px 40px;
-	box-shadow: 5px 10px 10px rgba(0,0,0,0.5);
+	box-shadow: 3px 8px 10px rgba(0,0,0,0.5);
 	position: relative;
 	text-transform: lowercase;
 	letter-spacing: 3px;
-	transition-duration: 0.3s;
+	transition-duration: 0.2s;
 	border-radius: 20px;
 }
 
 #drawcard-btn:hover{
-	top: 3px;
-	left: 8px;
-	box-shadow: 2px 2px black;
+	top: 2px;
+	left: 5px;
+	box-shadow: 1px 3px black;
 }
 
 #cards-in-play {
