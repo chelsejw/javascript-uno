@@ -6,6 +6,7 @@ var cardPile = [];
 var playerDeck = [];
 var computerDeck = [];
 var cardInPlay = [];
+var currentPlayerIsUser = true;
 
 var colorPicker = document.querySelector('.color-picker')
 
@@ -62,16 +63,8 @@ function getRandomInt(max) {
 function givePlayersDeck(num) {
     var deckLength = num;
 
-    for (var i = 0; i < deckLength; i++) {
-        var randomIndex1 = getRandomInt(cardPile.length)
-        var randomCard1 = cardPile[randomIndex1];
-        playerDeck.push(randomCard1);
-        cardPile.splice(randomIndex1, 1);
-        var randomIndex2 = getRandomInt(cardPile.length)
-        var randomCard2 = cardPile[randomIndex2];
-        computerDeck.push(randomCard2)
-        cardPile.splice(randomIndex2, 1);
-    }
+    drawCards(7, playerDeck);
+    drawCards(7, computerDeck);
     var starterCard = cardPile.splice(getRandomInt(cardPile.length), 1);
     cardInPlay.push(starterCard[0]);
     renderCardInPlay(cardInPlay);
@@ -79,80 +72,91 @@ function givePlayersDeck(num) {
 
 
 function handleCardClick() {
-    var playerCardValues = this.id.split("-")
-    var playerType = playerCardValues[0]
-    var playerColor = playerCardValues[1]
-    var playerValue = playerCardValues[2]
-    var playerIndex = playerCardValues[3]
+    if (currentPlayerIsUser === true) {
+        var playerCardValues = this.id.split("-")
+        var playerType = playerCardValues[0]
+        var playerColor = playerCardValues[1]
+        var playerValue = playerCardValues[2]
+        var playerIndex = playerCardValues[3]
 
-    //If player value +2 or +4 (these are considered numbers), do not parseInt. Else if it's a number, parseInt.
-    if (playerValue === `+2` || playerValue === `+4`) {
-        playerValue;
-    } else if (!isNaN(playerValue)) {
-        playerValue = parseInt(playerValue)
-    }
-    var playerCard = {
-        type: playerType,
-        color: playerColor,
-        value: playerValue,
-        index: playerIndex
-    }
-    var latestCard = getLatestCard()
-    var latestColor = latestCard.color;
-    var latestType = latestCard.type;
-    var latestValue = latestCard.value;
-
-    if (playerType === `wild`) {
-      console.log(`At stage: checking player type, isColorSelected = ${isColorSelected}`)
-
-        var isColorSelected = false
-        renderWildColorPicker();
-        toggleDisplay(colorPicker);
-        var chosenColor = colorPicked;
-        var confirmed = confirmWildColor;
-        if (confirmed) {
-          playerCard.color = colorPicked;
-          playThisCard(playerCard, playerDeck)
+        //If player value +2 or +4 (these are considered numbers), do not parseInt. Else if it's a number, parseInt.
+        if (playerValue === `+2` || playerValue === `+4`) {
+            playerValue;
+        } else if (!isNaN(playerValue)) {
+            playerValue = parseInt(playerValue)
         }
-    } else if (playerValue === latestValue) {
-        cardInPlay = playerCard;
-        playThisCard(playerCard, playerDeck)
+        var playerCard = {
+            type: playerType,
+            color: playerColor,
+            value: playerValue,
+            index: playerIndex
+        }
+        var latestCard = getLatestCard()
+        var latestColor = latestCard.color;
+        var latestType = latestCard.type;
+        var latestValue = latestCard.value;
 
-    } else if (playerColor === latestColor) {
-      playThisCard(playerCard, playerDeck)
+        if (playerType === `wild`) {
+            console.log(`At stage: checking player type, isColorSelected = ${isColorSelected}`)
 
-    } else {
-        console.log(`you can't play that card.`)
+            var isColorSelected = false
+            renderWildColorPicker();
+            toggleDisplay(colorPicker);
+            var chosenColor = colorPicked;
+            var confirmed = confirmWildColor;
+            if (confirmed) {
+                playerCard.color = colorPicked;
+                playThisCard(playerCard, playerDeck)
+                currentPlayerIsUser = !currentPlayerIsUser
+            }
+        } else if (playerValue === latestValue) {
+            cardInPlay = playerCard;
+            playThisCard(playerCard, playerDeck)
+            currentPlayerIsUser = !currentPlayerIsUser
+
+        } else if (playerColor === latestColor) {
+            playThisCard(playerCard, playerDeck)
+            currentPlayerIsUser = !currentPlayerIsUser
+        } else {
+            console.log(`you can't play that card.`)
+        }
     }
-
 }
 
-var colorPicked = function () {
+var colorPicked = function() {
     isColorSelected = true;
     console.log(`At stage: colorPicked, isColorSelected = ${isColorSelected}`)
     return this.id;
 }
 
 var confirmWildColor = function() {
-  console.log(`At stage: confirmWildColor(), isColorSelected = ${isColorSelected}`)
+    console.log(`At stage: confirmWildColor(), isColorSelected = ${isColorSelected}`)
 
     if (isColorSelected) {
         return true;
     } else {
-      console.log(`Color is not selected yet.`)
-      return false;
+        console.log(`Color is not selected yet.`)
+        return false;
     }
 }
 
 //Function moves a card from someone's deck & sets it as the CardInPlay
 //"card" should be a card object with an index key, and deck is player/computer deck array
 function playThisCard(card, deck) {
-  cardInPlay.push(card)
-  deck.splice(card.index, 1)
-  renderCardInPlay();
-  renderPlayerDeck();
+    cardInPlay.push(card)
+    deck.splice(card.index, 1)
+    renderCardInPlay();
+    renderPlayerDeck();
 }
 
+function drawCards(numOfCards, deck) {
+    for (var i = 0; i < numOfCards; i++) {
+        var randomIndex = getRandomInt(cardPile.length)
+        var randomCard = cardPile[randomIndex];
+        deck.push(randomCard);
+        cardPile.splice(randomIndex, 1);
+    }
+}
 
 //Start game first for easier debugging.
 generateDeck(defaultColors);
