@@ -225,6 +225,7 @@ function playThisCard(card, deck) {
 function nextPlayer(){
   if (currentPlayer==='user') {
     currentPlayer = 'computer'
+    displayLatestMove('Waiting for computer to make a move...')
     setTimeout(computerMove, 2000);
   } else if (currentPlayer==='computer') {
     currentPlayer = 'user'
@@ -256,12 +257,21 @@ function computerMove() {
     //Then loop through and check for valid move.
     for (var i = 0; i < computerDeck.length; i++) {
         var card = computerDeck[i]
+
         var validMove = checkValidMove(card)
         if (validMove) {
             playThisCard(card, computerDeck);
             renderComputerDeck();
             renderCardInPlay();
             return moveWasMade = true;
+        } else if (card.type==='wild') {
+          var randomColorIndex = getRandomInt(3);
+          var randomColor = defaultColors[randomColorIndex];
+          card.color = randomColor;
+          playThisCard(card, computerDeck);
+          renderComputerDeck();
+          renderCardInPlay();
+          return moveWasMade = true;
         }
     }
     if (!moveWasMade) {
