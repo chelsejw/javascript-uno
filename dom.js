@@ -1,10 +1,6 @@
-
-function renderComputerDeck(){
-
-  console.log(`render com deck triggered`)
-
-var computerDeckDiv = document.getElementById('computer-deck');
-computerDeckDiv.innerText = "";
+function renderComputerDeck() {
+    var computerDeckDiv = document.getElementById('computer-deck');
+    computerDeckDiv.innerText = "";
 
     for (var i = 0; i < computerDeck.length; i++) {
         var cardContainer = document.createElement('div');
@@ -166,9 +162,6 @@ function renderCardInPlay() {
     var cardColor = latestCard.color;
     var cardValue = latestCard.value;
 
-    var latestCardSpan = document.getElementById('latest-card')
-    latestCardSpan.innerHTML = `${cardColor} ${cardValue}`
-
     if (cardType === `wild`) {
         var newCard = renderWildCard(cardValue);
         newCard.classList.add('latest-card-image')
@@ -180,8 +173,8 @@ function renderCardInPlay() {
     cardsInPlayDiv.appendChild(newCard);
 }
 
-function getLatestCard(){
-  return cardInPlay[cardInPlay.length-1];
+function getLatestCard() {
+    return cardInPlay[cardInPlay.length - 1];
 }
 
 function renderPlayerDeck() {
@@ -189,7 +182,7 @@ function renderPlayerDeck() {
     //DOM
     var playerDeckDisplay = document.getElementById('player-deck')
     playerDeckDisplay.innerText = "";
-     for (var i = 0; i < playerDeck.length; i++) {
+    for (var i = 0; i < playerDeck.length; i++) {
 
         //Loop through the player deck and get the following values.
         var cardType = playerDeck[i].type;

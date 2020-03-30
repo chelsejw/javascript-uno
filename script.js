@@ -6,7 +6,10 @@ var cardPile = [];
 var playerDeck = [];
 var computerDeck = [];
 var cardInPlay = [];
-var currentPlayerIsUser = true;
+var playerName = null;
+var currentPlayer = null;
+var selectedColor = null
+
 
 var colorPicker = document.querySelector('.color-picker')
 
@@ -67,11 +70,14 @@ function givePlayersDeck(num) {
     var starterCard = cardPile.splice(getRandomInt(cardPile.length), 1);
     cardInPlay.push(starterCard[0]);
     renderCardInPlay();
+    currentPlayer = 'user';
+    var latestCardSpan = document.getElementById('latest-card')
+    latestCardSpan.innerHTML = `${starterCard[0].color} ${starterCard[0].value}`
 }
 
 
 function handleCardClick() {
-    if (currentPlayerIsUser === true) {
+    if (currentPlayer === 'user') {
         var playerCardValues = this.id.split("-")
         var playerType = playerCardValues[0]
         var playerColor = playerCardValues[1]
@@ -95,81 +101,95 @@ function handleCardClick() {
         var latestType = latestCard.type;
         var latestValue = latestCard.value;
 
+        //If player card is wild, it will always be playable, so no need to check.
         if (playerType === `wild`) {
-
+            //Unhide color picker div and render color buttons.
             renderWildColorPicker();
             toggleDisplay(colorPicker);
+            //Add event listener to the confirm button.
             var confirmBtn = document.getElementById('confirm');
-            confirmBtn.addEventListener('click', function(event){
-              if (selectedColor) {
-                playerCard.color = selectedColor;
-                playThisCard(playerCard, playerDeck);
-                toggleDisplay(colorPicker);
-              } else {
-                  console.log(`Color is not selected yet.`)
-              }
+            confirmBtn.addEventListener('click', function(event) {
+
+                //If selectedColor (global var) is not null, then assign the selectedColor to wildcard and play it, hide the colorpicker div, then remove value from selectedColor for future wildcards.
+                if (selectedColor) {
+                    playerCard.color = selectedColor;
+                    playThisCard(playerCard, playerDeck);
+                    toggleDisplay(colorPicker);
+                    selectedColor = null;
+                } else {
+                    console.log(`Color is not selected yet.`)
+                }
             });
-
-
-        } else if (playerValue === latestValue) {
-            cardInPlay = playerCard;
-            playThisCard(playerCard, playerDeck)
-
-        } else if (playerColor === latestColor) {
-            playThisCard(playerCard, playerDeck)
         } else {
-            console.log(`you can't play that card.`)
+            //If the card is not a wild card, we have to check for valid move.
+            var validMove = checkValidMove(playerCard)
+            //If the card is a valid move, then play the card.
+            if (validMove) {
+                playThisCard(playerCard, playerDeck)
+                //If not, error message.
+            } else {
+                console.log(`can't play this card`)
+            }
         }
     }
-}
+};
 
-var selectedColor = null
-
+//this function assigns the selected color icon's id to the selectedColor global variable
 var colorPicked = function() {
     selectedColor = this.id;
 }
 
-var confirmWildColor = function() {
-    if (selectedColor) {
-      playerCard.color = selectedColor;
-      playThisCard(playerCard, playerDeck);
-      toggleDisplay(colorPicker);
+
+function checkValidMove(card) {
+    var latestCard = getLatestCard()
+    var latestColor = latestCard.color;
+    var latestType = latestCard.type;
+    var latestValue = latestCard.value;
+
+    if (card.value === latestValue) {
+        return true
+    } else if (card.color === latestColor) {
+        return true
     } else {
-        console.log(`Color is not selected yet.`)
-        return false;
+        return false
     }
 }
 
 //Function moves a card from someone's deck & sets it as the CardInPlay
 //"card" should be a card object with an index key, and deck is player/computer deck array
 function playThisCard(card, deck) {
-
-  console.log(card);
-    if (card.value==='+2' && deck===playerDeck) {
-      console.log(`computer deck length before:` + computerDeck.length)
-      drawCards(2, computerDeck)
-      console.log(`computer deck length after:` + computerDeck.length)
-    } else if (card.value==='+4' && deck===playerDeck) {
-      drawCards(4, computerDeck)
-    } else if (card.value==='+2' && deck===computerDeck) {
-      drawCards(2, playerDeck)
-    } else if (card.value==='+4' && deck===computerDeck) {
-      drawCards(4, playerDeck)
-    } else if (card.value==='skip' && deck===playerDeck) {
-      //Computer does not get their turn. User should be able to play another card.
-    } else if (card.value==='skip' && deck===computerDeck) {
-      //Computer should then make a move.
+    if (card.value === '+2' && deck === playerDeck) {
+        drawCards(2, computerDeck);
+    } else if (card.value === '+4' && deck === playerDeck) {
+        drawCards(4, computerDeck)
+    } else if (card.value === '+2' && deck === computerDeck) {
+        drawCards(2, playerDeck)
+    } else if (card.value === '+4' && deck === computerDeck) {
+        drawCards(4, playerDeck)
+    } else if (card.value === 'skip' && deck === playerDeck) {
+        //Computer does not get their turn. User should be able to play another card.
+    } else if (card.value === 'skip' && deck === computerDeck) {
+        //Computer should then make a move.
     }
     //Just realised that Reverse cards don't really have an effect unless there are more than 2 players.
     cardInPlay.push(card);
     deck.splice(card.index, 1)
+    var latestCardSpan = document.getElementById('latest-card')
+    latestCardSpan.innerHTML = `${card.color} ${card.value} from ${currentPlayer}`
+
+    if (currentPlayer==='user') {
+      currentPlayer = 'computer'
+      setTimeout(computerMove, 2000);
+    } else if (currentPlayer==='computer') {
+      currentPlayer = 'user'
+    }
     renderCardInPlay();
     renderPlayerDeck();
     renderComputerDeck();
 }
 
 function drawCards(numOfCards, deck) {
-console.log(`draw cards triggered, draw ${numOfCards}`);
+    console.log(`draw cards triggered, draw ${numOfCards}`);
 
     for (var i = 0; i < numOfCards; i++) {
         var randomIndex = getRandomInt(cardPile.length)
@@ -178,6 +198,26 @@ console.log(`draw cards triggered, draw ${numOfCards}`);
         cardPile.splice(randomIndex, 1);
     }
 }
+
+//comDeck is the array of opponent's cards eg computerDeck
+function computerMove() {
+    var moveWasMade = false
+    for (var i = 0; i < computerDeck.length; i++) {
+        var card = computerDeck[i]
+        var validMove = checkValidMove(card)
+        if (validMove) {
+            playThisCard(card, computerDeck);
+            renderComputerDeck();
+            renderCardInPlay();
+            return moveWasMade = true;
+        }
+    }
+    if (!moveWasMade) {
+        drawCards(1, computerDeck);
+        renderComputerDeck();
+    }
+}
+
 
 //Start game first for easier debugging.
 generateDeck(defaultColors);
