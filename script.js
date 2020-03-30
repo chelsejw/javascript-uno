@@ -36,6 +36,7 @@ function generateDeck(colorChoices) {
             cardPile.push(colorCards)
         }
     }
+
     //Generate the wildcards: draw 4 & chooseColor.
     for (var cardCount = 0; cardCount < 4; cardCount++) {
         var wildDraw4 = {
@@ -61,13 +62,11 @@ function getRandomInt(max) {
 }
 
 function givePlayersDeck(num) {
-    var deckLength = num;
-
     drawCards(7, playerDeck);
     drawCards(7, computerDeck);
     var starterCard = cardPile.splice(getRandomInt(cardPile.length), 1);
     cardInPlay.push(starterCard[0]);
-    renderCardInPlay(cardInPlay);
+    renderCardInPlay();
 }
 
 
@@ -97,43 +96,44 @@ function handleCardClick() {
         var latestValue = latestCard.value;
 
         if (playerType === `wild`) {
-            console.log(`At stage: checking player type, isColorSelected = ${isColorSelected}`)
 
-            var isColorSelected = false
             renderWildColorPicker();
             toggleDisplay(colorPicker);
-            var chosenColor = colorPicked;
-            var confirmed = confirmWildColor;
-            if (confirmed) {
-                playerCard.color = colorPicked;
-                playThisCard(playerCard, playerDeck)
-                currentPlayerIsUser = !currentPlayerIsUser
-            }
+            var confirmBtn = document.getElementById('confirm');
+            confirmBtn.addEventListener('click', function(event){
+              if (selectedColor) {
+                playerCard.color = selectedColor;
+                playThisCard(playerCard, playerDeck);
+                toggleDisplay(colorPicker);
+              } else {
+                  console.log(`Color is not selected yet.`)
+              }
+            });
+
+
         } else if (playerValue === latestValue) {
             cardInPlay = playerCard;
             playThisCard(playerCard, playerDeck)
-            currentPlayerIsUser = !currentPlayerIsUser
 
         } else if (playerColor === latestColor) {
             playThisCard(playerCard, playerDeck)
-            currentPlayerIsUser = !currentPlayerIsUser
         } else {
             console.log(`you can't play that card.`)
         }
     }
 }
 
+var selectedColor = null
+
 var colorPicked = function() {
-    isColorSelected = true;
-    console.log(`At stage: colorPicked, isColorSelected = ${isColorSelected}`)
-    return this.id;
+    selectedColor = this.id;
 }
 
 var confirmWildColor = function() {
-    console.log(`At stage: confirmWildColor(), isColorSelected = ${isColorSelected}`)
-
-    if (isColorSelected) {
-        return true;
+    if (selectedColor) {
+      playerCard.color = selectedColor;
+      playThisCard(playerCard, playerDeck);
+      toggleDisplay(colorPicker);
     } else {
         console.log(`Color is not selected yet.`)
         return false;
@@ -143,13 +143,34 @@ var confirmWildColor = function() {
 //Function moves a card from someone's deck & sets it as the CardInPlay
 //"card" should be a card object with an index key, and deck is player/computer deck array
 function playThisCard(card, deck) {
-    cardInPlay.push(card)
+
+  console.log(card);
+    if (card.value==='+2' && deck===playerDeck) {
+      console.log(`computer deck length before:` + computerDeck.length)
+      drawCards(2, computerDeck)
+      console.log(`computer deck length after:` + computerDeck.length)
+    } else if (card.value==='+4' && deck===playerDeck) {
+      drawCards(4, computerDeck)
+    } else if (card.value==='+2' && deck===computerDeck) {
+      drawCards(2, playerDeck)
+    } else if (card.value==='+4' && deck===computerDeck) {
+      drawCards(4, playerDeck)
+    } else if (card.value==='skip' && deck===playerDeck) {
+      //Computer does not get their turn. User should be able to play another card.
+    } else if (card.value==='skip' && deck===computerDeck) {
+      //Computer should then make a move.
+    }
+    //Just realised that Reverse cards don't really have an effect unless there are more than 2 players.
+    cardInPlay.push(card);
     deck.splice(card.index, 1)
     renderCardInPlay();
     renderPlayerDeck();
+    renderComputerDeck();
 }
 
 function drawCards(numOfCards, deck) {
+console.log(`draw cards triggered, draw ${numOfCards}`);
+
     for (var i = 0; i < numOfCards; i++) {
         var randomIndex = getRandomInt(cardPile.length)
         var randomCard = cardPile[randomIndex];

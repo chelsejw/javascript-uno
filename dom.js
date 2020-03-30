@@ -1,5 +1,11 @@
 
-function renderComputerDeck() {
+function renderComputerDeck(){
+
+  console.log(`render com deck triggered`)
+
+var computerDeckDiv = document.getElementById('computer-deck');
+computerDeckDiv.innerText = "";
+
     for (var i = 0; i < computerDeck.length; i++) {
         var cardContainer = document.createElement('div');
         cardContainer.classList.add('card-container');
@@ -16,7 +22,7 @@ function renderComputerDeck() {
         cardContainer.appendChild(backCard);
         backCard.appendChild(backCardRing);
         backCard.appendChild(unoText);
-        document.getElementById('computer-deck').appendChild(cardContainer);
+        computerDeckDiv.appendChild(cardContainer);
     }
 }
 
@@ -74,7 +80,6 @@ function renderColorCard(value, color) {
         middle.innerText = value
         bottomRight.innerText = value
     }
-
     return card;
 }
 
@@ -136,13 +141,9 @@ function renderWildColorPicker() {
         colorIcon.addEventListener('click', colorPicked)
         colorRow.appendChild(colorIcon);
     }
-
-    var confirmBtn = document.getElementById('confirm')
-    confirmBtn.addEventListener('click', confirmWildColor);
-
-    var container = document.querySelector('.color-picker');
-
-    container.insertBefore(colorRow, container.lastElementChild);
+    var container = document.getElementById('generated-colorpicker');
+    container.innerText = "";
+    container.appendChild(colorRow);
 }
 
 
@@ -160,7 +161,7 @@ function renderCardInPlay() {
     var cardsInPlayDiv = document.getElementById('cards-in-play')
     cardsInPlayDiv.innerText = "";
 
-    var latestCard = cardInPlay[cardInPlay.length-1]
+    var latestCard = getLatestCard()
     var cardType = latestCard.type;
     var cardColor = latestCard.color;
     var cardValue = latestCard.value;
