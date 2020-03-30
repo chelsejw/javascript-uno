@@ -9,7 +9,16 @@ var cardInPlay = [];
 var playerName = null;
 var currentPlayer = null;
 var selectedColor = null
+var currentPlayerDisplay = document.getElementById('current-player')
+var drawBtn = document.getElementById('drawcard-btn')
+drawBtn.addEventListener('click', drawOne)
 
+function drawOne(){
+  drawCards(1, playerDeck);
+  nextPlayer();
+  renderPlayerDeck();
+  showCurrentPlayer();
+}
 
 var colorPicker = document.querySelector('.color-picker')
 
@@ -71,8 +80,17 @@ function givePlayersDeck(num) {
     cardInPlay.push(starterCard[0]);
     renderCardInPlay();
     currentPlayer = 'user';
-    var latestCardSpan = document.getElementById('latest-card')
-    latestCardSpan.innerHTML = `${starterCard[0].color} ${starterCard[0].value}`
+    displayLatestMove(`${starterCard[0].color} ${starterCard[0].value}`);
+    showCurrentPlayer();
+}
+
+function displayLatestMove(value){
+  var latestMoveSpan = document.getElementById('latest-move');
+  latestMoveSpan.innerText = value;
+}
+
+function showCurrentPlayer(){
+  currentPlayerDisplay.innerText = currentPlayer;
 }
 
 
@@ -100,7 +118,7 @@ function handleCardClick() {
             type: playerType,
             color: playerColor,
             value: playerValue,
-            index: playerIndex
+            indexInDeck: playerIndex
         }
         var latestCard = getLatestCard()
         var latestColor = latestCard.color;
@@ -165,9 +183,8 @@ function checkValidMove(card) {
 //"card" should be a card object with an index key, and deck is player/computer deck array
 function playThisCard(card, deck) {
   cardInPlay.push(card);
-  deck.splice(card.index, 1)
-  var latestCardSpan = document.getElementById('latest-card')
-  latestCardSpan.innerHTML = `${card.color} ${card.value} from ${currentPlayer}`
+  deck.splice(card.indexInDeck, 1)
+  displayLatestMove(`${card.color} ${card.value} from ${currentPlayer}`)
 
     if (card.value === '+2' && deck === playerDeck) {
         drawCards(2, computerDeck);
@@ -184,17 +201,25 @@ function playThisCard(card, deck) {
         drawCards(4, playerDeck)
         nextPlayer();
     } else if (card.value === 'skip' && deck === playerDeck) {
-        //Computer does not get their turn. User should be able to play another card.
+        showCurrentPlayer();
     } else if (card.value === 'skip' && deck === computerDeck) {
-        //Computer should then make a move.
+      showCurrentPlayer();
+      setTimeout(computerMove, 2000);
+
     } else {
       nextPlayer();
     }
     //Just realised that Reverse cards don't really have an effect unless there are more than 2 players.
-
     renderCardInPlay();
     renderPlayerDeck();
     renderComputerDeck();
+    showCurrentPlayer();
+
+    var winner = checkWin();
+    if (winner) {
+      alert(`${winner} has won the game!`)
+    }
+
 }
 
 function nextPlayer(){
@@ -219,7 +244,16 @@ function drawCards(numOfCards, deck) {
 
 //comDeck is the array of opponent's cards eg computerDeck
 function computerMove() {
+  console.log(computerDeck);
     var moveWasMade = false
+
+    //First reassign an indexInDeck value for all the cards.
+    for (var i=0; i < computerDeck.length; i++) {
+      var card = computerDeck[i]
+      card.indexInDeck = i;
+    }
+
+    //Then loop through and check for valid move.
     for (var i = 0; i < computerDeck.length; i++) {
         var card = computerDeck[i]
         var validMove = checkValidMove(card)
@@ -232,8 +266,21 @@ function computerMove() {
     }
     if (!moveWasMade) {
         drawCards(1, computerDeck);
+        displayLatestMove(`Computer drew a card`)
         renderComputerDeck();
+        nextPlayer();
+        showCurrentPlayer()
     }
+}
+
+function checkWin(){
+  if (computerDeck.length===0) {
+    currentPlayer = null;
+    return `computer`
+  } else if (playerDeck.length===0) {
+    currentPlayer = null;
+    return `user`
+  }
 }
 
 

@@ -2,7 +2,6 @@ body {
 	font-family: 'Nunito', sans-serif;
   text-align: center;
 	color: #fffdf6;
-/* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
 }
 
 h1,h2 {
@@ -20,8 +19,52 @@ h2 {
 	color: #46413B;
 }
 
+
+.row1 {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+}
+
+.row1col1 {
+	flex: 1;
+	text-align: center;
+}
+
+#drawcard-btn {
+	width: 250px;
+	font-size: 1.5rem;
+	border: 1px solid black;
+	padding: 10px 40px;
+	box-shadow: 5px 10px 10px rgba(0,0,0,0.5);
+	position: relative;
+	text-transform: lowercase;
+	letter-spacing: 3px;
+	transition-duration: 0.3s;
+	border-radius: 20px;
+}
+
+#drawcard-btn:hover{
+	top: 3px;
+	left: 8px;
+	box-shadow: 2px 2px black;
+}
+
+#cards-in-play {
+	text-align: center;
+	flex: 1
+}
+
+
 .latest-card{
 	color: #BEBBB6
+}
+
+
+
+#scoreboard {
+	flex: 1
 }
 
 header {
@@ -100,11 +143,9 @@ header {
 	flex: 1
 }
 
-#cards-in-play {
-}
-
 .latest-card-image {
 	transform: rotate(30deg);
+	margin-top: 70px;
 }
 
 #player-display {
