@@ -77,6 +77,12 @@ function givePlayersDeck(num) {
 
 
 function handleCardClick() {
+
+  //If colorPicker div is not hidden, hide it.
+  if (!colorPicker.classList.value.includes('hide')) {
+    toggleDisplay(colorPicker);
+  }
+
     if (currentPlayer === 'user') {
         var playerCardValues = this.id.split("-")
         var playerType = playerCardValues[0]
@@ -158,34 +164,46 @@ function checkValidMove(card) {
 //Function moves a card from someone's deck & sets it as the CardInPlay
 //"card" should be a card object with an index key, and deck is player/computer deck array
 function playThisCard(card, deck) {
+  cardInPlay.push(card);
+  deck.splice(card.index, 1)
+  var latestCardSpan = document.getElementById('latest-card')
+  latestCardSpan.innerHTML = `${card.color} ${card.value} from ${currentPlayer}`
+
     if (card.value === '+2' && deck === playerDeck) {
         drawCards(2, computerDeck);
+        nextPlayer();
     } else if (card.value === '+4' && deck === playerDeck) {
         drawCards(4, computerDeck)
+        nextPlayer();
+
     } else if (card.value === '+2' && deck === computerDeck) {
         drawCards(2, playerDeck)
+        nextPlayer();
+
     } else if (card.value === '+4' && deck === computerDeck) {
         drawCards(4, playerDeck)
+        nextPlayer();
     } else if (card.value === 'skip' && deck === playerDeck) {
         //Computer does not get their turn. User should be able to play another card.
     } else if (card.value === 'skip' && deck === computerDeck) {
         //Computer should then make a move.
+    } else {
+      nextPlayer();
     }
     //Just realised that Reverse cards don't really have an effect unless there are more than 2 players.
-    cardInPlay.push(card);
-    deck.splice(card.index, 1)
-    var latestCardSpan = document.getElementById('latest-card')
-    latestCardSpan.innerHTML = `${card.color} ${card.value} from ${currentPlayer}`
 
-    if (currentPlayer==='user') {
-      currentPlayer = 'computer'
-      setTimeout(computerMove, 2000);
-    } else if (currentPlayer==='computer') {
-      currentPlayer = 'user'
-    }
     renderCardInPlay();
     renderPlayerDeck();
     renderComputerDeck();
+}
+
+function nextPlayer(){
+  if (currentPlayer==='user') {
+    currentPlayer = 'computer'
+    setTimeout(computerMove, 2000);
+  } else if (currentPlayer==='computer') {
+    currentPlayer = 'user'
+  }
 }
 
 function drawCards(numOfCards, deck) {
