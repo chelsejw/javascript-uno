@@ -19,8 +19,11 @@
 
     <!--CARDS IN PLAY DISPLAY-->
 
-    <div id="cards-in-play" class="deck">
+    <div id="cards-in-play-container" class="deck">
+      <h2>Latest Card Played: <span id="latest-card"></span></h2>
+      <div id="cards-in-play">
 
+      </div>
     </div>
 
     <!--GAME BODY CONSISTS OF TWO COLUMNS-->
@@ -37,8 +40,11 @@
 
 
           <!--PLAYER DECK HERE-->
-            <div id="player-deck" class="deck">
+            <div id="player-display" class="deck">
+              <h2>Your Deck</h2>
+              <div id="player-deck">
 
+              </div>
             </div>
         </div>
 
@@ -57,10 +63,9 @@
         Best viewed on Chrome.
         <br />Copyright Chelsea Ee. 2020
     </footer>
+    <script type="text/javascript" src="dom.js"></script>
+    <script type="text/javascript" src="script.js"></script>
 
-    <script type="text/javascript" src="script.js">
-
-    </script>
 </body>
 
 </html>

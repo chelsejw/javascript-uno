@@ -1,57 +1,53 @@
 var defaultColors = [`red`, `blue`, `gold`, `green`];
+var customColors = []; //For users to choose 4 custom colors for the UNO cards
 const colorCardValues = [1, 2, 3, 4, 5, 6, 7, 8, 9, `skip`, `reverse`, `+2`]
 //The card pile that players can get cards from.
 var cardPile = [];
 var playerDeck = [];
 var computerDeck = [];
-var cardInPlay = null;
+var cardInPlay = [];
 
 var colorPicker = document.querySelector('.color-picker')
 
-var validMove = function() {
-
-    var cardToMatch = cardInPlay[0]
-    console.log(`this card is ${this.id}`)
-    console.log(`card in play is ${cardToMatch}`);
-
-}
-
+//color choices should be an ARRAY of four colors that are valid CSS color codes/names.
 function generateDeck(colorChoices) {
     //Generate numbercards 1-9 in 4 colors. (36 cards)
     for (var colorIndex = 0; colorIndex < colorChoices.length; colorIndex++) {
         var currentColor = colorChoices[colorIndex];
-
         //For the 4 colors, generate 1 x Number 0 card for each color.
         var colorCard0 = {
             type: `color`,
             color: currentColor,
-            value: 0
+            value: 0,
+            indexInDeck: null
         }
         cardPile.push(colorCard0);
-
         //For color cards 1-9 & skip/draw2/reverse, generate 2 each.
         for (var valueIndex = 0; valueIndex < colorCardValues.length; valueIndex++) {
             var colorCards = {
                 type: `color`,
                 color: currentColor,
-                value: colorCardValues[valueIndex]
+                value: colorCardValues[valueIndex],
+                indexInDeck: null
+
             }
             cardPile.push(colorCards)
             cardPile.push(colorCards)
         }
     }
-
     //Generate the wildcards: draw 4 & chooseColor.
     for (var cardCount = 0; cardCount < 4; cardCount++) {
         var wildDraw4 = {
             type: `wild`,
             color: "",
-            value: `+4`
+            value: `+4`,
+            indexInDeck: null
         }
         var wildColor = {
             type: `wild`,
             color: "",
-            value: `wildColor`
+            value: `wild`,
+            indexInDeck: null
         };
         cardPile.push(wildDraw4);
         cardPile.push(wildColor);
@@ -77,67 +73,10 @@ function givePlayersDeck(num) {
         cardPile.splice(randomIndex2, 1);
     }
     var starterCard = cardPile.splice(getRandomInt(cardPile.length), 1);
-    cardInPlay = starterCard[0]
+    cardInPlay.push(starterCard[0]);
     renderCardInPlay(cardInPlay);
 }
 
-function renderCardInPlay() {
-
-    var cardsInPlayDiv = document.getElementById('cards-in-play')
-    cardsInPlayDiv.innerText = "";
-
-    var cardType = cardInPlay.type;
-    var cardColor = cardInPlay.color;
-    var cardValue = cardInPlay.value;
-
-    var statusDisplay = document.createElement("h2");
-    statusDisplay.id = "status-display";
-    statusDisplay.innerText = "Latest Card Played: "
-
-    var latestCardSpan = document.createElement('span')
-    latestCardSpan.classList.add(`latest-card`);
-
-    latestCardSpan.innerHTML = `${cardColor} ${cardValue}`
-    statusDisplay.appendChild(latestCardSpan)
-    cardsInPlayDiv.appendChild(statusDisplay);
-
-    if (cardType === `wild`) {
-        var newCard = renderWildCard(cardValue);
-        newCard.classList.add('latest-card-image')
-    } else if (cardType === `color`) {
-        var newCard = renderColorCard(cardValue, cardColor)
-        newCard.classList.add('latest-card-image')
-    }
-    newCard.id = `${cardType}-${cardColor}-${cardValue}`
-    cardsInPlayDiv.appendChild(newCard);
-}
-
-function renderPlayerDeck() {
-    var playerDeckDisplay = document.getElementById('player-deck')
-    playerDeckDisplay.innerText = "";
-    var yourDeckH2 = document.createElement('h2')
-    yourDeckH2.innerText = "Your Deck";
-    playerDeckDisplay.appendChild(yourDeckH2);
-    for (var i = 0; i < playerDeck.length; i++) {
-
-        //Loop through the player deck and get the following values.
-        var currentCard = playerDeck[i];
-        var cardType = currentCard.type;
-        var cardColor = currentCard.color;
-        var cardValue = currentCard.value;
-        var cardIndex = i;
-
-        //If card type is wild, render wildcard accordingly.
-        if (cardType === `wild`) {
-            var card = renderWildCard(cardValue);
-        } else if (cardType === `color`) {
-            var card = renderColorCard(cardValue, cardColor)
-        }
-        card.id = `${cardType}-${cardColor}-${cardValue}-${cardIndex}`
-        card.addEventListener(`click`, handleCardClick)
-        playerDeckDisplay.appendChild(card);
-    }
-}
 
 function handleCardClick() {
     var playerCardValues = this.id.split("-")
@@ -155,11 +94,13 @@ function handleCardClick() {
     var playerCard = {
         type: playerType,
         color: playerColor,
-        value: playerValue
+        value: playerValue,
+        index: playerIndex
     }
-    var pileColor = cardInPlay.color;
-    var pileType = cardInPlay.type;
-    var pileValue = cardInPlay.value;
+    var latestCard = getLatestCard()
+    var latestColor = latestCard.color;
+    var latestType = latestCard.type;
+    var latestValue = latestCard.value;
 
     if (playerType === `wild`) {
       console.log(`At stage: checking player type, isColorSelected = ${isColorSelected}`)
@@ -171,181 +112,19 @@ function handleCardClick() {
         var confirmed = confirmWildColor;
         if (confirmed) {
           playerCard.color = colorPicked;
-          cardInPlay = playerCard;
-          playerDeck.splice(playerIndex, 1)
-          renderCardInPlay();
-          renderPlayerDeck();
+          playThisCard(playerCard, playerDeck)
         }
-    } else if (playerValue === pileValue) {
+    } else if (playerValue === latestValue) {
         cardInPlay = playerCard;
-        playerDeck.splice(playerIndex, 1)
-        renderCardInPlay();
-        renderPlayerDeck();
-    } else if (playerColor === pileColor) {
-        cardInPlay = playerCard;
-        playerDeck.splice(playerIndex, 1)
-        renderCardInPlay();
-        renderPlayerDeck();
+        playThisCard(playerCard, playerDeck)
+
+    } else if (playerColor === latestColor) {
+      playThisCard(playerCard, playerDeck)
+
     } else {
-        console.log(`you can't play that cardPile.`)
+        console.log(`you can't play that card.`)
     }
 
-
-}
-
-function renderComputerDeck() {
-    for (var i = 0; i < computerDeck.length; i++) {
-        var cardContainer = document.createElement('div');
-        cardContainer.classList.add('card-container');
-        var backCard = document.createElement('div');
-        backCard.classList.add('card');
-        backCard.classList.add('back-card');
-        var backCardRing = document.createElement('div');
-        backCardRing.classList.add('back-ring');
-        backCardRing.classList.add('card-ring');
-        var unoText = document.createElement('div');
-        unoText.classList.add('back-middle')
-        unoText.classList.add('middle')
-        unoText.innerText = "UNO";
-        cardContainer.appendChild(backCard);
-        backCard.appendChild(backCardRing);
-        backCard.appendChild(unoText);
-        document.getElementById('computer-deck').appendChild(cardContainer);
-    }
-}
-
-function renderColorCard(value, color) {
-    var card = createDiv(`card-container`);
-    var cardInner = createDiv(`card`);
-    var cardRing = createDiv(`card-ring`)
-    var topLeft = createDiv(`top-left`)
-    var middle = createDiv(`middle`)
-    var bottomRight = createDiv(`bottom-right`)
-
-    card.appendChild(cardInner)
-    cardInner.appendChild(topLeft)
-    cardInner.appendChild(cardRing)
-    cardInner.appendChild(middle)
-    cardInner.appendChild(bottomRight)
-    card.style.backgroundColor = color;
-
-    //If value is a string, render an action OR draw2 card.
-    if (value === '+2') {
-        topLeft.classList.add('draw');
-        middle.classList.add(`draw-middle`);
-        bottomRight.classList.add(`draw`)
-        topLeft.innerText = value
-        middle.innerText = value
-        bottomRight.innerText = value
-    } else if (value === 'skip' || value === 'reverse') {
-        topLeft.classList.add('action');
-        middle.classList.add(`action-middle`);
-        bottomRight.classList.add(`action`)
-        var icon1 = document.createElement(`i`)
-        var icon2 = document.createElement(`i`)
-        var icon3 = document.createElement(`i`)
-
-        icon1.classList.add(`fas`)
-        icon2.classList.add(`fas`)
-        icon3.classList.add(`fas`)
-        if (value === `skip`) {
-            icon1.classList.add(`fa-ban`)
-            icon2.classList.add(`fa-ban`)
-            icon3.classList.add(`fa-ban`)
-        } else if (value === `reverse`) {
-            icon1.classList.add(`fa-random`)
-            icon2.classList.add(`fa-random`)
-            icon3.classList.add(`fa-random`)
-        }
-        topLeft.appendChild(icon1);
-        middle.appendChild(icon2);
-        bottomRight.appendChild(icon3);
-    } else {
-        topLeft.classList.add('number')
-        middle.classList.add('number-middle')
-        bottomRight.classList.add('number')
-        topLeft.innerText = value
-        middle.innerText = value
-        bottomRight.innerText = value
-    }
-
-    return card;
-}
-
-
-function renderWildCard(value) {
-    var container = createDiv(`card-container`);
-    var innerCard = createDiv(`card wild`);
-    var wildRing = createDiv(`card-ring wild-ring`);
-    var wildIcon = renderWildCardIcon();
-    container.appendChild(innerCard)
-    innerCard.appendChild(wildRing)
-    innerCard.appendChild(wildIcon);
-    if (value === '+4') {
-        var topLeft = createDiv(`wild top-left`)
-        var bottomRight = createDiv(`wild bottom-right`)
-        topLeft.innerText = value
-        bottomRight.innerText = value
-        innerCard.appendChild(topLeft);
-        innerCard.appendChild(bottomRight);
-        return container;
-    } else if (value === 'wildColor') {
-        return container;
-    }
-}
-
-
-function renderWildCardIcon() {
-    var icon = createDiv(`wild-middle middle`)
-    var bottomCard = createDiv(`wild-icon wild-bottom`)
-    bottomCard.appendChild(createDiv('wild-icon-inner'))
-    var rightCard = createDiv(`wild-right wild-icon`)
-    rightCard.appendChild(createDiv('wild-icon-inner'))
-    var topCard = createDiv(`wild-icon wild-top`);
-    topCard.appendChild(createDiv('wild-icon-inner'))
-    var leftCard = createDiv(`wild-icon wild-left`);
-    leftCard.appendChild(createDiv('wild-icon-inner'))
-    icon.appendChild(bottomCard)
-    icon.appendChild(rightCard)
-    icon.appendChild(topCard)
-    icon.appendChild(leftCard)
-    return icon;
-}
-
-
-function createDiv(classes) {
-    var newDiv = document.createElement('div')
-    newDiv.classList.value = classes
-    return newDiv
-}
-
-
-function renderWildColorPicker() {
-    var colorRow = createDiv(`color-row`)
-    for (var iconNo = 0; iconNo < defaultColors.length; iconNo++) {
-        var colorIcon = document.createElement('button');
-        colorIcon.classList.add('color-icon');
-        colorIcon.style.backgroundColor = defaultColors[iconNo];
-        colorIcon.id = defaultColors[iconNo];
-        colorIcon.addEventListener('click', colorPicked)
-        colorRow.appendChild(colorIcon);
-    }
-
-    var confirmBtn = document.getElementById('confirm')
-    confirmBtn.addEventListener('click', confirmWildColor);
-
-    var container = document.querySelector('.color-picker');
-
-    container.insertBefore(colorRow, container.lastElementChild);
-}
-
-
-function toggleDisplay(element) {
-    if (element.classList.value.includes('hide')) {
-        element.classList.remove('hide');
-    } else {
-        element.classList.add('hide')
-    }
 }
 
 var colorPicked = function () {
@@ -365,26 +144,18 @@ var confirmWildColor = function() {
     }
 }
 
+//Function moves a card from someone's deck & sets it as the CardInPlay
+//"card" should be a card object with an index key, and deck is player/computer deck array
+function playThisCard(card, deck) {
+  cardInPlay.push(card)
+  deck.splice(card.index, 1)
+  renderCardInPlay();
+  renderPlayerDeck();
+}
+
+
 //Start game first for easier debugging.
 generateDeck(defaultColors);
 givePlayersDeck(7);
 renderComputerDeck();
 renderPlayerDeck();
-
-// THINGS LEFT TO WRITE: GAME FUNCTIONS
-// - Color picker for wildcards. (Set wildcard color to color icon selected, and play it only when color has been selected)
-// - Draw card from pile. (To be used when player/opponent wants to draw a card, and also when a draw-2 or draw-4 card is played)
-// - Wait for opponent move before player can make next move.
-// - During opponent's turn, check opponent deck for valid moves. Play the the first valid move available. If not, opponent must draw card from pile.
-// - If card pile is empty, regenerate a new pile with all the cards that have been played.
-// - Winning conditions
-
-// THINGS LEFT TO WRITE: DISPLAY/DOM
-// Start game setup: ask for player name & chosen colors (can choose default, or enter 4 custom colors)
-// Scoreboard
-
-
-//BONUS::
-// Countdown to click a button "Say Uno!" when player has only one card left, if button is not clicked in 10 seconds, it disappears & player has to draw 2.
-// Animate/add transitions for playing cards, waiting for opponent's turn, drawing cards from the pile
-//
