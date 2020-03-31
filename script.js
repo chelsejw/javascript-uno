@@ -13,11 +13,11 @@ var currentPlayerDisplay = document.getElementById('current-player')
 var drawBtn = document.getElementById('drawcard-btn')
 drawBtn.addEventListener('click', drawOne)
 
-function drawOne(){
-  drawCards(1, playerDeck);
-  nextPlayer();
-  renderPlayerDeck();
-  showCurrentPlayer();
+function drawOne() {
+    drawCards(1, playerDeck);
+    nextPlayer();
+    renderPlayerDeck();
+    showCurrentPlayer();
 }
 
 var colorPicker = document.querySelector('.color-picker')
@@ -77,6 +77,13 @@ function givePlayersDeck(num) {
     drawCards(7, playerDeck);
     drawCards(7, computerDeck);
     var starterCard = cardPile.splice(getRandomInt(cardPile.length), 1);
+
+    if (starterCard[0].type === 'wild') {
+        var randomColorIndex = getRandomInt(3);
+        var randomColor = defaultColors[randomColorIndex];
+        starterCard[0].color = randomColor
+    }
+
     cardInPlay.push(starterCard[0]);
     renderCardInPlay();
     currentPlayer = 'user';
@@ -84,29 +91,29 @@ function givePlayersDeck(num) {
     showCurrentPlayer();
 }
 
-function displayLatestMove(value){
-  var latestMoveSpan = document.getElementById('latest-move');
-  latestMoveSpan.innerText = value;
+function displayLatestMove(value) {
+    var latestMoveSpan = document.getElementById('latest-move');
+    latestMoveSpan.innerText = value;
 }
 
-function showCurrentPlayer(){
-  currentPlayerDisplay.innerText = currentPlayer;
+function showCurrentPlayer() {
+    currentPlayerDisplay.innerText = currentPlayer;
 }
 
 
 function handleCardClick() {
 
-  //If colorPicker div is not hidden, hide it.
-  if (!colorPicker.classList.value.includes('hide')) {
-    toggleDisplay(colorPicker);
-  }
+    //If colorPicker div is not hidden, hide it.
+    if (!colorPicker.classList.value.includes('hide')) {
+        toggleDisplay(colorPicker);
+    }
 
     if (currentPlayer === 'user') {
         var playerCardValues = this.id.split("-")
         var playerType = playerCardValues[0]
         var playerColor = playerCardValues[1]
         var playerValue = playerCardValues[2]
-        var playerIndex = playerCardValues[3]
+        var playerIndex = parseInt(playerCardValues[3])
 
         //If player value +2 or +4 (these are considered numbers), do not parseInt. Else if it's a number, parseInt.
         if (playerValue === `+2` || playerValue === `+4`) {
@@ -133,7 +140,6 @@ function handleCardClick() {
             //Add event listener to the confirm button.
             var confirmBtn = document.getElementById('confirm');
             confirmBtn.addEventListener('click', function(event) {
-
                 //If selectedColor (global var) is not null, then assign the selectedColor to wildcard and play it, hide the colorpicker div, then remove value from selectedColor for future wildcards.
                 if (selectedColor) {
                     playerCard.color = selectedColor;
@@ -182,9 +188,9 @@ function checkValidMove(card) {
 //Function moves a card from someone's deck & sets it as the CardInPlay
 //"card" should be a card object with an index key, and deck is player/computer deck array
 function playThisCard(card, deck) {
-  cardInPlay.push(card);
-  deck.splice(card.indexInDeck, 1)
-  displayLatestMove(`${card.color} ${card.value} from ${currentPlayer}`)
+    cardInPlay.push(card);
+    deck.splice(card.indexInDeck, 1)
+    displayLatestMove(`${card.color} ${card.value} from ${currentPlayer}`)
 
     if (card.value === '+2' && deck === playerDeck) {
         drawCards(2, computerDeck);
@@ -203,11 +209,11 @@ function playThisCard(card, deck) {
     } else if (card.value === 'skip' && deck === playerDeck) {
         showCurrentPlayer();
     } else if (card.value === 'skip' && deck === computerDeck) {
-      showCurrentPlayer();
-      setTimeout(computerMove, 2000);
+        showCurrentPlayer();
+        setTimeout(computerMove, 2000);
 
     } else {
-      nextPlayer();
+        nextPlayer();
     }
     //Just realised that Reverse cards don't really have an effect unless there are more than 2 players.
     renderCardInPlay();
@@ -217,19 +223,18 @@ function playThisCard(card, deck) {
 
     var winner = checkWin();
     if (winner) {
-      alert(`${winner} has won the game!`)
+        alert(`${winner} has won the game!`)
     }
 
 }
 
-function nextPlayer(){
-  if (currentPlayer==='user') {
-    currentPlayer = 'computer'
-    displayLatestMove('Waiting for computer to make a move...')
-    setTimeout(computerMove, 2000);
-  } else if (currentPlayer==='computer') {
-    currentPlayer = 'user'
-  }
+function nextPlayer() {
+    if (currentPlayer === 'user') {
+        currentPlayer = 'computer'
+        setTimeout(computerMove, 2000);
+    } else if (currentPlayer === 'computer') {
+        currentPlayer = 'user'
+    }
 }
 
 function drawCards(numOfCards, deck) {
@@ -241,17 +246,52 @@ function drawCards(numOfCards, deck) {
         deck.push(randomCard);
         cardPile.splice(randomIndex, 1);
     }
+
+    if (cardPile.length < 4) {
+        cardPile.splice(cardPile.length - 1, )
+    }
+}
+
+function shuffleCardPile() {
+
+    //Remove the latest card from the cards in play
+    var saveLatestCard = cardInPlay.pop();
+    console.log(saveLatestCard);
+
+    //With all the cards before the latest card in play, randomly put them back into the card pile.
+    for (var i = 0; i < cardInPlay.length; i++) {
+        var randomIndex = getRandomInt(cardPile.length);
+        var randomCard = cardInPlay[randomIndex];
+        cardPile.push(randomCard);
+        cardInPlay.splice(randomIndex, 1);
+    }
+
+    cardInPlay.push(saveLatestCard);
+
+
+}
+
+
+function getRandomItem(arr) {
+    var randomIndex = getRandomInt(arr.length - 1);
+    var randomItem = arr[randomIndex];
+    return randomItem;
 }
 
 //comDeck is the array of opponent's cards eg computerDeck
 function computerMove() {
-  console.log(computerDeck);
-    var moveWasMade = false
-
+    console.log(computerDeck);
+    var moveWasMade = false;
+    var deckColors = []
+    var onlyWildCards = true;
     //First reassign an indexInDeck value for all the cards.
-    for (var i=0; i < computerDeck.length; i++) {
-      var card = computerDeck[i]
-      card.indexInDeck = i;
+    for (var i = 0; i < computerDeck.length; i++) {
+        var card = computerDeck[i]
+        card.indexInDeck = i; //Assign index
+        if (card.type !== "wild") {
+            onlyWildCards = false;
+            deckColors.push(card.color) //Track only the non-wild cards in the totalColors array.
+        }
     }
 
     //Then loop through and check for valid move.
@@ -264,38 +304,91 @@ function computerMove() {
             renderComputerDeck();
             renderCardInPlay();
             return moveWasMade = true;
-        } else if (card.type==='wild') {
-          var randomColorIndex = getRandomInt(3);
-          var randomColor = defaultColors[randomColorIndex];
-          card.color = randomColor;
-          playThisCard(card, computerDeck);
-          renderComputerDeck();
-          renderCardInPlay();
-          return moveWasMade = true;
+        } else if (card.type === 'wild') {
+            debugger;
+            //If the deck only has wild cards, select a random color from the default colors.
+            if (onlyWildCards) {
+                randomColor = getRandomItem(defaultColors);
+                //Else if the deck has color cards as well, select a random color from the deck's colors.
+            } else {
+                var randomColor = getRandomInt(deckColors);
+            }
+            //Assign the card the randomColor, then play it.
+            card.color = randomColor;
+            playThisCard(card, computerDeck);
+            renderComputerDeck();
+            renderCardInPlay();
+            return moveWasMade = true;
         }
-    }
-    if (!moveWasMade) {
-        drawCards(1, computerDeck);
-        displayLatestMove(`Computer drew a card`)
-        renderComputerDeck();
-        nextPlayer();
-        showCurrentPlayer()
+        if (!moveWasMade) {
+            drawCards(1, computerDeck);
+            displayLatestMove(`Computer drew a card`)
+            renderComputerDeck();
+            nextPlayer();
+            showCurrentPlayer()
+        }
     }
 }
 
-function checkWin(){
-  if (computerDeck.length===0) {
-    currentPlayer = null;
-    return `computer`
-  } else if (playerDeck.length===0) {
-    currentPlayer = null;
-    return `user`
-  }
+
+function checkWin() {
+    if (computerDeck.length === 0) {
+        currentPlayer = null;
+        return `computer`
+    } else if (playerDeck.length === 0) {
+        currentPlayer = null;
+        return `user`
+    }
 }
 
 
 //Start game first for easier debugging.
 generateDeck(defaultColors);
 givePlayersDeck(7);
+
+cardInPlay.push({
+    type: 'color',
+    color: 'gold',
+    value: '0'
+})
+renderCardInPlay();
+
+
+//Give players both types of wild + action cards.
+playerDeck.push({
+    type: 'wild',
+    color: "",
+    value: 'wild'
+})
+playerDeck.push({
+    type: 'wild',
+    color: "",
+    value: '+4'
+})
+playerDeck.push({
+    type: 'color',
+    color: "gold",
+    value: 'skip'
+})
+playerDeck.push({
+    type: 'color',
+    color: "gold",
+    value: 'reverse'
+})
+
+computerDeck = []
+
+computerDeck.push({
+    type: 'wild',
+    color: "",
+    value: 'wild'
+})
+computerDeck.push({
+    type: 'wild',
+    color: "",
+    value: '+4'
+})
+
+
 renderComputerDeck();
 renderPlayerDeck();
