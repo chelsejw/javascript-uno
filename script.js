@@ -2,6 +2,9 @@ var defaultColors = [`red`, `blue`, `gold`, `green`];
 var playerName = null;
 var unoColors = null;
 var customColors = []; //For users to choose 4 custom colors for the UNO cards
+
+var usersColors = [];
+
 const colorCardValues = [1, 2, 3, 4, 5, 6, 7, 8, 9, `skip`, `reverse`, `+2`]
 var cardPile = [];
 var playerDeck = [];
@@ -14,7 +17,6 @@ var computerPlayerIndex = null
 
 var playerName = null;
 var selectedColor = null;
-playerName = 'Chelsea'
 
 var userScore = 0;
 var com1Score = 0;
@@ -22,8 +24,7 @@ var com2Score = 0;
 
 var orderOfPlayers = [playerName, `Computer 1`, `Computer 2`]
 var indexOfLastPlayer = orderOfPlayers.length - 1
-var playerIndex = 0;
-var currentPlayer = orderOfPlayers[playerIndex];
+
 var nextPlayer = null;
 
 var currentPlayerDisplay = document.getElementById('current-player')
@@ -63,6 +64,9 @@ function restartGame(){
   playerDeck = [];
   computer1Deck = [];
   computer2Deck = [];
+  orderOfPlayers = [playerName, `Computer 1`, `Computer 2`];
+  playerIndex = 0;
+  currentPlayer = orderOfPlayers[playerIndex];
   generateDeck();
   givePlayersDeck(7);
   refreshDisplays();
@@ -89,12 +93,7 @@ var colorPicker = document.querySelector('.color-picker')
 
 //color choices should be an ARRAY of four colors that are valid CSS color codes/names.
 function generateDeck() {
-  var colorChoices;
-  if (chosenOption==='defaultColors'){
-    colorChoices = defaultColors
-  } else if (chosenOption==='customColors') {
-    colorChoices = customColors
-  }
+  var colorChoices = usersColors;
     //Generate numbercards 1-9 in 4 colors. (36 cards)
     for (var colorIndex = 0; colorIndex < colorChoices.length; colorIndex++) {
         var currentColor = colorChoices[colorIndex];
@@ -152,7 +151,7 @@ function givePlayersDeck(num) {
 
     if (starterCard[0].type === 'wild') {
         var randomColorIndex = getRandomInt(3);
-        var randomColor = defaultColors[randomColorIndex];
+        var randomColor = usersColors[randomColorIndex];
         starterCard[0].color = randomColor
     }
 
@@ -428,7 +427,7 @@ function computerMove() {
         } else if (card.type === 'wild') {
             //If the deck only has wild cards, select a random color from the default colors.
             if (onlyWildCards) {
-                randomColor = getRandomItem(defaultColors);
+                randomColor = getRandomItem(usersColors);
                 //Else if the deck has color cards as well, select a random color from the deck's colors.
             } else {
                 randomColor = getRandomItem(deckColors);

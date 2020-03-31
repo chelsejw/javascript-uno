@@ -138,11 +138,11 @@ function createDiv(classes) {
 
 function renderWildColorPicker() {
     var colorRow = createDiv(`color-row`)
-    for (var iconNo = 0; iconNo < defaultColors.length; iconNo++) {
+    for (var iconNo = 0; iconNo < usersColors.length; iconNo++) {
         var colorIcon = document.createElement('button');
         colorIcon.classList.add('color-icon');
-        colorIcon.style.backgroundColor = defaultColors[iconNo];
-        colorIcon.id = defaultColors[iconNo];
+        colorIcon.style.backgroundColor = usersColors[iconNo];
+        colorIcon.id = usersColors[iconNo];
         colorIcon.addEventListener('click', colorPicked)
         colorRow.appendChild(colorIcon);
     }
@@ -252,8 +252,7 @@ function getCustomCols() {
     }
 
     if (newArr.length === 4) {
-        customColors = newArr;
-        return customColors;
+        return newArr;
     }
 }
 
@@ -264,7 +263,7 @@ function startButton() {
         if (chosenOption === "customColors") {
             var valid = getCustomCols();
             if (valid) {
-                getCustomCols();
+                usersColors = getCustomCols();
                 startGame();
             } else {
                 if (errorContainer.classList.value.includes('hide')) {
@@ -273,6 +272,7 @@ function startButton() {
                 errorMsg.innerText = "Please give a value for all four colours."
             }
         } else if (chosenOption==="defaultColors") {
+          usersColors = defaultColors;
           startGame();
         }
     } else {
