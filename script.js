@@ -253,22 +253,24 @@ function drawCards(numOfCards, deck) {
 }
 
 function shuffleCardPile() {
+  console.log(`before: cardInPlay = ${cardInPlay.length}`)
+  console.log(`before: cardPile = ${cardPile.length}`)
 
     //Remove the latest card from the cards in play
-    var saveLatestCard = cardInPlay.pop();
-    console.log(saveLatestCard);
-
-    //With all the cards before the latest card in play, randomly put them back into the card pile.
-    for (var i = 0; i < cardInPlay.length; i++) {
-        var randomIndex = getRandomInt(cardPile.length);
+    var latestCard = cardInPlay.pop();
+    console.log(`latest card = ${latestCard}`)
+    //Get a random card from the cards left in cardInPlay, and put it back into the pile.
+    var currentLength = cardInPlay.length
+    for (var i = 0; i < currentLength; i++) {
+        var randomIndex = getRandomInt(cardInPlay.length);
         var randomCard = cardInPlay[randomIndex];
         cardPile.push(randomCard);
         cardInPlay.splice(randomIndex, 1);
     }
 
-    cardInPlay.push(saveLatestCard);
-
-
+    cardInPlay.push(latestCard);
+    console.log(`after: cardInPlay = ${cardInPlay.length}`)
+    console.log(`after: cardPile = ${cardPile.length}`)
 }
 
 
