@@ -5,9 +5,9 @@
 * ~During opponent's turn, check opponent deck for valid moves. Play the the first valid move available. If not, opponent must draw card from pile.~
 * If card pile is empty, regenerate a new pile with all the cards that have been played.
 * ~Winning conditions~
-* Valid move for opponents should include wildcard.
-* If opponent plays a wildcard, the color assigned will be a color that the opponent has within his Deck
-* If starterCard is a wildcard, randomly assign a color.
+* ~Valid move for opponents should include wildcard.~
+* ~If opponent plays a wildcard, the color assigned will be a color that the opponent has within his Deck~
+* ~If starterCard is a wildcard, randomly assign a color.~
 * Add a second computer player so that total players would be more than 2 and the reverse card has some meaning.
 
 
