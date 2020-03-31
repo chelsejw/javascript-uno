@@ -1,12 +1,12 @@
 function renderComputerDeck(comNo) {
     var computerDeck;
     var computerDeckDiv
-    if (comNo===1) {
-      computerDeck = computer1Deck;
-      computerDeckDiv = document.getElementById(`computer1-deck`);
-    } else if (comNo===2) {
-      computerDeck = computer2Deck;
-      computerDeckDiv = document.getElementById(`computer2-deck`);
+    if (comNo === 1) {
+        computerDeck = computer1Deck;
+        computerDeckDiv = document.getElementById(`computer1-deck`);
+    } else if (comNo === 2) {
+        computerDeck = computer2Deck;
+        computerDeckDiv = document.getElementById(`computer2-deck`);
     }
 
     computerDeckDiv.innerText = "";
@@ -210,4 +210,95 @@ function renderPlayerDeck() {
         card.addEventListener(`click`, handleCardClick)
         playerDeckDisplay.appendChild(card);
     }
+}
+
+
+
+///START GAME FUNCTIONS
+
+var nameInput = document.getElementById('name-input');
+var defaultColorBtn = document.getElementById('default-btn')
+var customColorBtn = document.getElementById('custom-btn')
+var errorContainer = document.getElementById('error-container')
+var errorMsg = document.getElementById('error-message')
+var startBtn = document.getElementById('start-btn')
+var customColContainer = document.getElementById('custom-col-container')
+
+startBtn.addEventListener('click', startButton)
+defaultColorBtn.addEventListener('click', defaultOrCustom)
+customColorBtn.addEventListener('click', defaultOrCustom)
+
+var customColInputs = document.querySelectorAll('.custom-input');
+
+for (var i = 0; i < customColInputs.length; i++) {
+    customColInputs[i].addEventListener('change', showCustomCol);
+}
+
+var chosenOption = null;
+
+
+function showCustomCol() {
+    var input = this.value;
+    this.style.backgroundColor = input
+}
+
+function getCustomCols() {
+    var newArr = []
+    for (var i = 0; i < customColInputs.length; i++) {
+        if (customColInputs[i].value === "") {
+            return false
+        }
+        newArr.push(customColInputs[i].value);
+    }
+
+    if (newArr.length === 4) {
+        customColors = newArr;
+        return customColors;
+    }
+}
+
+function startButton() {
+
+    if (chosenOption && nameInput.value !== "") {
+        playerName = nameInput.value
+        if (chosenOption === "customColors") {
+            var valid = getCustomCols();
+            if (valid) {
+                getCustomCols();
+                startGame();
+            } else {
+                if (errorContainer.classList.value.includes('hide')) {
+                    errorContainer.classList.remove('hide');
+                }
+                errorMsg.innerText = "Please give a value for all four colours."
+            }
+        } else if (chosenOption==="defaultColors") {
+          startGame();
+        }
+    } else {
+        //If both inputs are not complete: show the error div if it's hidden.
+        if (errorContainer.classList.value.includes('hide')) {
+            errorContainer.classList.remove('hide');
+        }
+        if (!chosenOption) {
+            errorMsg.innerText = "Sorry, please choose an option for your colors."
+        } else if (nameInput.value === "") {
+            errorMsg.innerText = "Please enter a name."
+        } else if (!chosenOption && nameInput.value === "") {
+            errorMsg.innerText = 'Sorry, please ensure you have chosen a color option & entered your name.'
+        }
+    }
+}
+
+function defaultOrCustom() {
+    chosenOption = this.value
+    console.log(chosenOption)
+    if (chosenOption === 'customColors') {
+        if (customColContainer.classList.value.includes('hide')) {
+            customColContainer.classList.remove('hide')
+        }
+    } else if (chosenOption === 'defaultColors')
+        if (!customColContainer.classList.value.includes('hide')) {
+            customColContainer.classList.add('hide')
+        }
 }

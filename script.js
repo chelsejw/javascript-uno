@@ -40,6 +40,13 @@ function refreshScoreboard(){
   com2Scoreboard.innerText = com2Score
 }
 
+function startGame(){
+  document.querySelector(`.starter`).classList.add('hide');
+  document.querySelector(`.game-body`).classList.add('flex')
+  document.querySelector(`.display`).classList.remove('hide');
+  restartGame();
+}
+
 
 function refreshDisplays(){
   nextPlayerDisplay();
@@ -56,7 +63,7 @@ function restartGame(){
   playerDeck = [];
   computer1Deck = [];
   computer2Deck = [];
-  generateDeck(defaultColors);
+  generateDeck();
   givePlayersDeck(7);
   refreshDisplays();
 }
@@ -81,7 +88,13 @@ function showLatestCard(){
 var colorPicker = document.querySelector('.color-picker')
 
 //color choices should be an ARRAY of four colors that are valid CSS color codes/names.
-function generateDeck(colorChoices) {
+function generateDeck() {
+  var colorChoices;
+  if (chosenOption==='defaultColors'){
+    colorChoices = defaultColors
+  } else if (chosenOption==='customColors') {
+    colorChoices = customColors
+  }
     //Generate numbercards 1-9 in 4 colors. (36 cards)
     for (var colorIndex = 0; colorIndex < colorChoices.length; colorIndex++) {
         var currentColor = colorChoices[colorIndex];
@@ -456,9 +469,3 @@ function checkWin() {
 
 
 //Start game first for easier debugging.
-generateDeck(defaultColors);
-givePlayersDeck(7);
-renderComputerDeck(1);
-renderComputerDeck(2);
-renderPlayerDeck();
-refreshScoreboard();
