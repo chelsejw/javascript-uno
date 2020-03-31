@@ -245,7 +245,8 @@ function showCustomCol() {
 function getCustomCols() {
     var newArr = []
     for (var i = 0; i < customColInputs.length; i++) {
-        if (customColInputs[i].value === "") {
+      var inputValue = customColInputs[i].value
+        if (inputValue === "" || inputValue==="white" || inputValue==="#ffffff") {
             return false
         }
         newArr.push(customColInputs[i].value);
@@ -269,11 +270,11 @@ function startButton() {
                 if (errorContainer.classList.value.includes('hide')) {
                     errorContainer.classList.remove('hide');
                 }
-                errorMsg.innerText = "Please give a value for all four colours."
+                errorMsg.innerText = "Please give a valid color for all four inputs."
             }
-        } else if (chosenOption==="defaultColors") {
-          usersColors = defaultColors;
-          startGame();
+        } else if (chosenOption === "defaultColors") {
+            usersColors = defaultColors;
+            startGame();
         }
     } else {
         //If both inputs are not complete: show the error div if it's hidden.
@@ -291,7 +292,15 @@ function startButton() {
 }
 
 function defaultOrCustom() {
-    chosenOption = this.value
+  if (chosenOption==='customColors' && this.value==="defaultColors") {
+    document.getElementById('custom-btn').classList.remove('active-btn')
+  } else if (chosenOption==='defaultColors' && this.value==='customColors') {
+    document.getElementById('default-btn').classList.remove('active-btn')
+  }
+
+  chosenOption = this.value;
+  this.classList.add('active-btn')
+
     console.log(chosenOption)
     if (chosenOption === 'customColors') {
         if (customColContainer.classList.value.includes('hide')) {

@@ -28,7 +28,6 @@ button {
 }
 
 .starter button {
-	background-color: white;
 	padding: 10px;
 	border: 1px solid grey;
 	text-transform: uppercase;
@@ -64,6 +63,11 @@ button:focus{
 
 .starter button:hover {
 	background-color: grey;
+}
+
+.active-btn {
+	background-color: black;
+	color: white;
 }
 
 input {
