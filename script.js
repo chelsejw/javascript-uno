@@ -280,7 +280,6 @@ function getRandomItem(arr) {
 
 //comDeck is the array of opponent's cards eg computerDeck
 function computerMove() {
-    console.log(computerDeck);
     var moveWasMade = false;
     var deckColors = []
     var onlyWildCards = true;
@@ -305,7 +304,6 @@ function computerMove() {
             renderCardInPlay();
             return moveWasMade = true;
         } else if (card.type === 'wild') {
-            debugger;
             //If the deck only has wild cards, select a random color from the default colors.
             if (onlyWildCards) {
                 randomColor = getRandomItem(defaultColors);
@@ -320,13 +318,14 @@ function computerMove() {
             renderCardInPlay();
             return moveWasMade = true;
         }
-        if (!moveWasMade) {
-            drawCards(1, computerDeck);
-            displayLatestMove(`Computer drew a card`)
-            renderComputerDeck();
-            nextPlayer();
-            showCurrentPlayer()
-        }
+    }
+
+    if (!moveWasMade) {
+        drawCards(1, computerDeck);
+        displayLatestMove(`Computer drew a card`)
+        renderComputerDeck();
+        nextPlayer();
+        return showCurrentPlayer();
     }
 }
 
