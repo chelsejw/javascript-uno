@@ -8,13 +8,14 @@
 * ~Valid move for opponents should include wildcard.~
 * ~If opponent plays a wildcard, the color assigned will be a color that the opponent has within his Deck~
 * ~If starterCard is a wildcard, randomly assign a color.~
-* Add a second computer player so that total players would be more than 2 and the reverse card has some meaning.
+* ~Add a second computer player so that total players would be more than 2 and the reverse card has some meaning.~
+* Write function to reverse order of players when a reverse card is played
 
 
 ## THINGS LEFT TO WRITE: DISPLAY/DOM
 * Start game setup: ask for player name & chosen colors (can choose default, or enter 4 custom colors)
 * Scoreboard
-* Current turn display: ~Show current player~ and the next player.
+* ~Current turn display: Show current player and the next player.~
 * ~Draw card button~
 
 
