@@ -14,8 +14,11 @@ var computerPlayerIndex = null
 
 var playerName = null;
 var selectedColor = null;
-
 playerName = 'Chelsea'
+
+var userScore = 0;
+var com1Score = 0;
+var com2Score = 0;
 
 var orderOfPlayers = [playerName, `Computer 1`, `Computer 2`]
 var indexOfLastPlayer = orderOfPlayers.length - 1
@@ -27,15 +30,42 @@ var currentPlayerDisplay = document.getElementById('current-player')
 var drawBtn = document.getElementById('drawcard-btn')
 drawBtn.addEventListener('click', drawOne)
 
+function refreshScoreboard(){
+  var userScoreboard = document.getElementById('user-score')
+  var com1Scoreboard = document.getElementById('com1-score')
+  var com2Scoreboard = document.getElementById('com2-score')
+
+  userScoreboard.innerText = userScore
+  com1Scoreboard.innerText = com1Score
+  com2Scoreboard.innerText = com2Score
+}
+
+
+function refreshDisplays(){
+  nextPlayerDisplay();
+  renderCardInPlay();
+  renderPlayerDeck();
+  renderComputerDeck(1);
+  renderComputerDeck(2);
+  showCurrentPlayer();
+  gameStatusDisplay()
+}
+
+function restartGame(){
+  generateDeck(defaultColors);
+  givePlayersDeck(7);
+  refreshDisplays();
+}
+
 function drawOne() {
     drawCards(1, playerDeck);
+    displayLatestMove(`${currentPlayer} drew a card`)
     changePlayer();
     renderPlayerDeck();
-    showCurrentPlayer();
-    nextPlayerDisplay();
-    gameStatusDisplay()
+    refreshDisplays();
     checkForComputerMove();
 }
+
 
 var colorPicker = document.querySelector('.color-picker')
 
@@ -106,14 +136,13 @@ function givePlayersDeck(num) {
     renderCardInPlay();
     currentPlayer = playerName;
     displayLatestMove(`${starterCard[0].color} ${starterCard[0].value}`);
-    showCurrentPlayer();
-    nextPlayerDisplay();
-    gameStatusDisplay();
 
-    var deckName = document.querySelectorAll('.user-name')
-    for (var i = 0; i < deckName.length; i++) {
-        deckName[i].innerText = playerName;
+    var userNameElements = document.querySelectorAll('.user-name')
+    for (var i = 0; i < userNameElements.length; i++) {
+        userNameElements[i].innerText = playerName;
     }
+
+    refreshDisplays();
 }
 
 function displayLatestMove(value) {
@@ -200,7 +229,6 @@ function checkValidMove(card) {
     var latestColor = latestCard.color;
     var latestType = latestCard.type;
     var latestValue = latestCard.value;
-
     if (card.value === latestValue) {
         return true
     } else if (card.color === latestColor) {
@@ -220,7 +248,7 @@ function playThisCard(card, deck) {
     var affectedDeck;
 
     if (nextPlayer===playerName) {
-      affectedDeck = playerName
+      affectedDeck = playerDeck;
     } else if (nextPlayer==="Computer 1") {
       affectedDeck = computer1Deck
     } else if (nextPlayer==="Computer 2") {
@@ -234,21 +262,18 @@ function playThisCard(card, deck) {
     } else if (card.value === 'skip') {
         changePlayer();
     } else if (card.value==='reverse'){
-        //write a function to reverse array of orderOfPlayers
+        reversePlayerOrder();
     }
 
     changePlayer();
-    nextPlayerDisplay();
-    renderCardInPlay();
-    renderPlayerDeck();
-    renderComputerDeck(1);
-    renderComputerDeck(2);
-    showCurrentPlayer();
-    gameStatusDisplay()
-    checkForComputerMove();
+    refreshDisplays();
     var winner = checkWin();
     if (winner) {
         alert(`${winner} has won the game!`)
+        gameStatus.innerText = `${winner} has won! Going to the next round in 5 seconds...`
+        setTimeout(restartGame, 5000)
+    } else {
+        checkForComputerMove();
     }
 }
 
@@ -263,11 +288,22 @@ function gameStatusDisplay(){
 function checkForComputerMove(){
       if (currentPlayer==='Computer 1') {
         computerPlayerIndex = 1
-        setTimeout(computerMove, 3000)
+        setTimeout(computerMove, 2000)
       } else if (currentPlayer==='Computer 2'){
         computerPlayerIndex = 2
-        setTimeout(computerMove, 3000)
+        setTimeout(computerMove, 2000)
       }
+}
+
+function reversePlayerOrder(){
+  var reversedOrder = []
+  var noOfLoops = orderOfPlayers.length
+
+  for (var i=0; i < noOfLoops; i++) {
+    reversedOrder.push(orderOfPlayers.pop());
+  }
+  orderOfPlayers = reversedOrder;
+  playerIndex = orderOfPlayers.findIndex(name => name === currentPlayer);
 }
 
 
@@ -375,9 +411,7 @@ function computerMove() {
             //Assign the card the randomColor, then play it.
             card.color = randomColor;
             playThisCard(card, computerDeck);
-            renderComputerDeck(1);
-            renderComputerDeck(2);
-            renderCardInPlay();
+            refreshDisplays();
             return moveWasMade = true;
         }
     }
@@ -385,10 +419,9 @@ function computerMove() {
     if (!moveWasMade) {
         drawCards(1, computerDeck);
         displayLatestMove(`${currentPlayer} drew a card`)
-        renderComputerDeck(1);
-        renderComputerDeck(2);
         changePlayer();
-        showCurrentPlayer();
+        checkForComputerMove();
+        refreshDisplays();
     }
 }
 
@@ -396,13 +429,16 @@ function computerMove() {
 function checkWin() {
     if (computer1Deck.length === 0) {
         currentPlayer = null;
-        return `computer`
+        com1Score++
+        return `Computer 1`;
     } else if (computer2Deck.length === 0) {
           currentPlayer = null;
-          return `user`
+          com2Score++;
+          return `Computer 2`
     } else if (playerDeck.length === 0) {
         currentPlayer = null;
-        return `user`
+        userScore++;
+        return playerName
     }
 }
 
@@ -413,3 +449,4 @@ givePlayersDeck(7);
 renderComputerDeck(1);
 renderComputerDeck(2);
 renderPlayerDeck();
+refreshScoreboard();
