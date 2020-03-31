@@ -23,15 +23,15 @@
   <div class="left-display">
     <div class="display-row">
       Latest Move:
-      <br /><span class="value" id="latest-move"> Gold 5 </span>
+      <br /><span class="value" id="latest-move"></span>
     </div>
     <div class="display-row">
       Current Turn
-      <br /><span class="value" id="current-player">Computer 1</span>
+      <br /><span class="value" id="current-player"></span>
     </div>
     <div class="display-row">
       Next Player
-      <br /><span class="value" id="next-player">User</span>
+      <br /><span class="value" id="next-player"></span>
     </div>
 
   </div>
@@ -40,21 +40,6 @@
   <div id="cards-in-play-container" class="deck">
     <h2 id="current-status">Waiting for player move...</h2>
     <div id="cards-in-play">
-      <div class="card-container" id="latest-card">
-          <div class="card">
-              <div class="number top-left">
-                  5
-              </div>
-              <div class="card-ring">
-              </div>
-              <div class="number-middle middle">
-                  5
-              </div>
-              <div class="number bottom-right">
-                  5
-              </div>
-          </div>
-      </div>
     </div>
     <div class="display-row">
       <button id='drawcard-btn'>draw</button>
@@ -68,7 +53,7 @@
     <div class="display-row">
       <div id="scoreboard">
       <h2>Scoreboard</h2>
-        <p>User Score: <span class="value">1</span></p>
+        <p><span class="user-name"></span>'s Score: <span class="value">1</span></p>
         <p>Computer 1 Score: <span class="value">1</span></p>
         <p>Computer 2 Score: <span class="value">1</span></p>
       </div>
@@ -103,68 +88,8 @@
 
           <!--PLAYER DECK HERE-->
             <div id="player-display" class="deck">
-              <h2>Your Deck</h2>
+              <h2><span class="user-name"></span>'s Deck</h2>
               <div id="player-deck">
-                <div class="card-container" id="latest-card">
-                    <div class="card">
-                        <div class="number top-left">
-                            5
-                        </div>
-                        <div class="card-ring">
-                        </div>
-                        <div class="number-middle middle">
-                            5
-                        </div>
-                        <div class="number bottom-right">
-                            5
-                        </div>
-                    </div>
-                </div>
-                <div class="card-container" id="latest-card">
-                    <div class="card">
-                        <div class="number top-left">
-                            5
-                        </div>
-                        <div class="card-ring">
-                        </div>
-                        <div class="number-middle middle">
-                            5
-                        </div>
-                        <div class="number bottom-right">
-                            5
-                        </div>
-                    </div>
-                </div>
-                <div class="card-container" id="latest-card">
-                    <div class="card">
-                        <div class="number top-left">
-                            5
-                        </div>
-                        <div class="card-ring">
-                        </div>
-                        <div class="number-middle middle">
-                            5
-                        </div>
-                        <div class="number bottom-right">
-                            5
-                        </div>
-                    </div>
-                </div>
-                <div class="card-container" id="latest-card">
-                    <div class="card">
-                        <div class="number top-left">
-                            5
-                        </div>
-                        <div class="card-ring">
-                        </div>
-                        <div class="number-middle middle">
-                            5
-                        </div>
-                        <div class="number bottom-right">
-                            5
-                        </div>
-                    </div>
-                </div>
               </div>
             </div>
         </div>
@@ -174,35 +99,17 @@
         <!--OPPONENT DECK HERE-->
         <div id="col-right">
             <div id="computer-display" class="deck">
-                <h2>Opponent Deck</h2>
-                <div id="computer-deck">
-                  <div class="card-container">
-                      <div class="card back-card">
-                          <div class="back-ring card-ring">
-                          </div>
-                          <div class="back-middle middle">
-                              UNO
-                          </div>
-                      </div>
-                  </div>
-                  <div class="card-container">
-                      <div class="card back-card">
-                          <div class="back-ring card-ring">
-                          </div>
-                          <div class="back-middle middle">
-                              UNO
-                          </div>
-                      </div>
-                  </div>
-                  <div class="card-container">
-                      <div class="card back-card">
-                          <div class="back-ring card-ring">
-                          </div>
-                          <div class="back-middle middle">
-                              UNO
-                          </div>
-                      </div>
-                  </div>
+                <h2>Computer 1 Deck</h2>
+                <div id="computer1-deck">
+                </div>
+            </div>
+        </div>
+
+        <div id="col-right">
+            <div id="computer-display" class="deck">
+                <h2>Computer 2 Deck</h2>
+                <div id="computer2-deck">
+
                 </div>
             </div>
         </div>

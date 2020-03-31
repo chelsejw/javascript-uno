@@ -1,5 +1,14 @@
-function renderComputerDeck() {
-    var computerDeckDiv = document.getElementById('computer-deck');
+function renderComputerDeck(comNo) {
+    var computerDeck;
+    var computerDeckDiv
+    if (comNo===1) {
+      computerDeck = computer1Deck;
+      computerDeckDiv = document.getElementById(`computer1-deck`);
+    } else if (comNo===2) {
+      computerDeck = computer2Deck;
+      computerDeckDiv = document.getElementById(`computer2-deck`);
+    }
+
     computerDeckDiv.innerText = "";
 
     for (var i = 0; i < computerDeck.length; i++) {

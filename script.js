@@ -1,21 +1,34 @@
 var defaultColors = [`red`, `blue`, `gold`, `green`];
+var playerName = null;
+var unoColors = null;
 var customColors = []; //For users to choose 4 custom colors for the UNO cards
 const colorCardValues = [1, 2, 3, 4, 5, 6, 7, 8, 9, `skip`, `reverse`, `+2`]
-//The card pile that players can get cards from.
 var cardPile = [];
 var playerDeck = [];
-var computerDeck = [];
+var computer1Deck = [];
+var computer2Deck = [];
 var cardInPlay = [];
+
+var computerPlayerIndex = null
+
 var playerName = null;
-var currentPlayer = null;
-var selectedColor = null
+var selectedColor = null;
+
+playerName = 'Chelsea'
+
+var orderOfPlayers = [playerName, `Computer 1`, `Computer 2`]
+var indexOfLastPlayer = orderOfPlayers.length - 1
+var playerIndex = 0;
+var currentPlayer = orderOfPlayers[playerIndex];
+var nextPlayer = null;
+
 var currentPlayerDisplay = document.getElementById('current-player')
 var drawBtn = document.getElementById('drawcard-btn')
 drawBtn.addEventListener('click', drawOne)
 
 function drawOne() {
     drawCards(1, playerDeck);
-    nextPlayer();
+    changePlayer();
     renderPlayerDeck();
     showCurrentPlayer();
 }
@@ -75,7 +88,8 @@ function getRandomInt(max) {
 
 function givePlayersDeck(num) {
     drawCards(7, playerDeck);
-    drawCards(7, computerDeck);
+    drawCards(7, computer1Deck);
+    drawCards(7, computer2Deck);
     var starterCard = cardPile.splice(getRandomInt(cardPile.length), 1);
 
     if (starterCard[0].type === 'wild') {
@@ -86,9 +100,15 @@ function givePlayersDeck(num) {
 
     cardInPlay.push(starterCard[0]);
     renderCardInPlay();
-    currentPlayer = 'user';
+    currentPlayer = playerName;
     displayLatestMove(`${starterCard[0].color} ${starterCard[0].value}`);
     showCurrentPlayer();
+    nextPlayerDisplay();
+
+    var deckName = document.querySelectorAll('.user-name')
+    for (var i = 0; i < deckName.length; i++) {
+        deckName[i].innerText = playerName;
+    }
 }
 
 function displayLatestMove(value) {
@@ -108,7 +128,7 @@ function handleCardClick() {
         toggleDisplay(colorPicker);
     }
 
-    if (currentPlayer === 'user') {
+    if (currentPlayer === playerName) {
         var playerCardValues = this.id.split("-")
         var playerType = playerCardValues[0]
         var playerColor = playerCardValues[1]
@@ -192,34 +212,31 @@ function playThisCard(card, deck) {
     deck.splice(card.indexInDeck, 1)
     displayLatestMove(`${card.color} ${card.value} from ${currentPlayer}`)
 
-    if (card.value === '+2' && deck === playerDeck) {
-        drawCards(2, computerDeck);
-        nextPlayer();
-    } else if (card.value === '+4' && deck === playerDeck) {
-        drawCards(4, computerDeck)
-        nextPlayer();
-
-    } else if (card.value === '+2' && deck === computerDeck) {
-        drawCards(2, playerDeck)
-        nextPlayer();
-
-    } else if (card.value === '+4' && deck === computerDeck) {
-        drawCards(4, playerDeck)
-        nextPlayer();
-    } else if (card.value === 'skip' && deck === playerDeck) {
-        showCurrentPlayer();
-    } else if (card.value === 'skip' && deck === computerDeck) {
-        showCurrentPlayer();
-        setTimeout(computerMove, 2000);
-
-    } else {
-        nextPlayer();
+    if (card.value === '+2') {
+        drawCards(2, nextPlayer);
+    } else if (card.value === '+4'){
+        drawCards(4, nextPlayer)
+    } else if (card.value === 'skip') {
+        changePlayer();
+    } else if (card.value==='reverse'){
+        //write a function to reverse array of orderOfPlayers
     }
-    //Just realised that Reverse cards don't really have an effect unless there are more than 2 players.
+
+    changePlayer();
+    nextPlayerDisplay();
     renderCardInPlay();
     renderPlayerDeck();
-    renderComputerDeck();
+    renderComputerDeck(1);
+    renderComputerDeck(2);
     showCurrentPlayer();
+
+    if (currentPlayer==='Computer 1') {
+      computerPlayerIndex = 1
+      setTimeout(computerMove, 3000)
+    } else if (currentPlayer==='Computer 2'){
+      computerPlayerIndex = 2
+      setTimeout(computerMove, 3000)
+    }
 
     var winner = checkWin();
     if (winner) {
@@ -228,13 +245,24 @@ function playThisCard(card, deck) {
 
 }
 
-function nextPlayer() {
-    if (currentPlayer === 'user') {
-        currentPlayer = 'computer'
-        setTimeout(computerMove, 2000);
-    } else if (currentPlayer === 'computer') {
-        currentPlayer = 'user'
+function changePlayer(){
+    if (playerIndex === indexOfLastPlayer) {
+        playerIndex = 0;
+    } else {
+        playerIndex++;
     }
+    return currentPlayer = orderOfPlayers[playerIndex];
+}
+
+function nextPlayerDisplay(){
+  if (playerIndex===indexOfLastPlayer) {
+    nextPlayer = orderOfPlayers[0];
+  } else {
+    nextPlayer = orderOfPlayers[playerIndex + 1]
+  }
+
+  var nextPlayerDiv = document.getElementById('next-player')
+  nextPlayerDiv.innerText = nextPlayer;
 }
 
 function drawCards(numOfCards, deck) {
@@ -253,8 +281,8 @@ function drawCards(numOfCards, deck) {
 }
 
 function shuffleCardPile() {
-  console.log(`before: cardInPlay = ${cardInPlay.length}`)
-  console.log(`before: cardPile = ${cardPile.length}`)
+    console.log(`before: cardInPlay = ${cardInPlay.length}`)
+    console.log(`before: cardPile = ${cardPile.length}`)
 
     //Remove the latest card from the cards in play
     var latestCard = cardInPlay.pop();
@@ -282,6 +310,12 @@ function getRandomItem(arr) {
 
 //comDeck is the array of opponent's cards eg computerDeck
 function computerMove() {
+    var computerDeck;
+    if (computerPlayerIndex === 1) {
+        computerDeck = computer1Deck;
+    } else if (computerPlayerIndex === 2) {
+        computerDeck = computer2Deck;
+    }
     var moveWasMade = false;
     var deckColors = []
     var onlyWildCards = true;
@@ -302,7 +336,8 @@ function computerMove() {
         var validMove = checkValidMove(card)
         if (validMove) {
             playThisCard(card, computerDeck);
-            renderComputerDeck();
+            renderComputerDeck(1);
+            renderComputerDeck(2);
             renderCardInPlay();
             return moveWasMade = true;
         } else if (card.type === 'wild') {
@@ -316,7 +351,8 @@ function computerMove() {
             //Assign the card the randomColor, then play it.
             card.color = randomColor;
             playThisCard(card, computerDeck);
-            renderComputerDeck();
+            renderComputerDeck(1);
+            renderComputerDeck(2);
             renderCardInPlay();
             return moveWasMade = true;
         }
@@ -325,9 +361,10 @@ function computerMove() {
     if (!moveWasMade) {
         drawCards(1, computerDeck);
         displayLatestMove(`Computer drew a card`)
-        renderComputerDeck();
-        nextPlayer();
-        return showCurrentPlayer();
+        renderComputerDeck(1);
+        renderComputerDeck(2);
+        changePlayer();
+        showCurrentPlayer();
     }
 }
 
@@ -346,5 +383,6 @@ function checkWin() {
 //Start game first for easier debugging.
 generateDeck(defaultColors);
 givePlayersDeck(7);
-renderComputerDeck();
+renderComputerDeck(1);
+renderComputerDeck(2);
 renderPlayerDeck();
