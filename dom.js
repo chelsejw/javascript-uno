@@ -245,8 +245,8 @@ function showCustomCol() {
 function getCustomCols() {
     var newArr = []
     for (var i = 0; i < customColInputs.length; i++) {
-      var inputValue = customColInputs[i].value
-        if (inputValue === "" || inputValue==="white" || inputValue==="#ffffff") {
+        var inputValue = customColInputs[i].value.toLowerCase();
+        if (inputValue === "" || inputValue === "white" || inputValue === "#ffffff") {
             return false
         }
         newArr.push(customColInputs[i].value);
@@ -292,16 +292,14 @@ function startButton() {
 }
 
 function defaultOrCustom() {
-  if (chosenOption==='customColors' && this.value==="defaultColors") {
-    document.getElementById('custom-btn').classList.remove('active-btn')
-  } else if (chosenOption==='defaultColors' && this.value==='customColors') {
-    document.getElementById('default-btn').classList.remove('active-btn')
-  }
+    if (chosenOption === 'customColors' && this.value === "defaultColors") {
+        document.getElementById('custom-btn').classList.remove('active-btn')
+    } else if (chosenOption === 'defaultColors' && this.value === 'customColors') {
+        document.getElementById('default-btn').classList.remove('active-btn')
+    }
 
-  chosenOption = this.value;
-  this.classList.add('active-btn')
-
-    console.log(chosenOption)
+    chosenOption = this.value;
+    this.classList.add('active-btn')
     if (chosenOption === 'customColors') {
         if (customColContainer.classList.value.includes('hide')) {
             customColContainer.classList.remove('hide')
