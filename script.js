@@ -247,8 +247,8 @@ function drawCards(numOfCards, deck) {
         cardPile.splice(randomIndex, 1);
     }
 
-    if (cardPile.length < 4) {
-        cardPile.splice(cardPile.length - 1, )
+    if (cardPile.length < 5) {
+        shuffleCardPile();
     }
 }
 
@@ -311,7 +311,7 @@ function computerMove() {
                 randomColor = getRandomItem(defaultColors);
                 //Else if the deck has color cards as well, select a random color from the deck's colors.
             } else {
-                var randomColor = getRandomInt(deckColors);
+                randomColor = getRandomItem(deckColors);
             }
             //Assign the card the randomColor, then play it.
             card.color = randomColor;
@@ -345,50 +345,5 @@ function checkWin() {
 //Start game first for easier debugging.
 generateDeck(defaultColors);
 givePlayersDeck(7);
-
-cardInPlay.push({
-    type: 'color',
-    color: 'gold',
-    value: '0'
-})
-renderCardInPlay();
-
-
-//Give players both types of wild + action cards.
-playerDeck.push({
-    type: 'wild',
-    color: "",
-    value: 'wild'
-})
-playerDeck.push({
-    type: 'wild',
-    color: "",
-    value: '+4'
-})
-playerDeck.push({
-    type: 'color',
-    color: "gold",
-    value: 'skip'
-})
-playerDeck.push({
-    type: 'color',
-    color: "gold",
-    value: 'reverse'
-})
-
-computerDeck = []
-
-computerDeck.push({
-    type: 'wild',
-    color: "",
-    value: 'wild'
-})
-computerDeck.push({
-    type: 'wild',
-    color: "",
-    value: '+4'
-})
-
-
 renderComputerDeck();
 renderPlayerDeck();
