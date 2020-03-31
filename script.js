@@ -8,6 +8,7 @@ var playerDeck = [];
 var computer1Deck = [];
 var computer2Deck = [];
 var cardInPlay = [];
+var gameStatus = document.getElementById('current-status')
 
 var computerPlayerIndex = null
 
@@ -31,6 +32,9 @@ function drawOne() {
     changePlayer();
     renderPlayerDeck();
     showCurrentPlayer();
+    nextPlayerDisplay();
+    gameStatusDisplay()
+    checkForComputerMove();
 }
 
 var colorPicker = document.querySelector('.color-picker')
@@ -104,6 +108,7 @@ function givePlayersDeck(num) {
     displayLatestMove(`${starterCard[0].color} ${starterCard[0].value}`);
     showCurrentPlayer();
     nextPlayerDisplay();
+    gameStatusDisplay();
 
     var deckName = document.querySelectorAll('.user-name')
     for (var i = 0; i < deckName.length; i++) {
@@ -212,10 +217,20 @@ function playThisCard(card, deck) {
     deck.splice(card.indexInDeck, 1)
     displayLatestMove(`${card.color} ${card.value} from ${currentPlayer}`)
 
+    var affectedDeck;
+
+    if (nextPlayer===playerName) {
+      affectedDeck = playerName
+    } else if (nextPlayer==="Computer 1") {
+      affectedDeck = computer1Deck
+    } else if (nextPlayer==="Computer 2") {
+      affectedDeck = computer2Deck
+    }
+
     if (card.value === '+2') {
-        drawCards(2, nextPlayer);
+        drawCards(2, affectedDeck);
     } else if (card.value === '+4'){
-        drawCards(4, nextPlayer)
+        drawCards(4, affectedDeck)
     } else if (card.value === 'skip') {
         changePlayer();
     } else if (card.value==='reverse'){
@@ -229,21 +244,32 @@ function playThisCard(card, deck) {
     renderComputerDeck(1);
     renderComputerDeck(2);
     showCurrentPlayer();
-
-    if (currentPlayer==='Computer 1') {
-      computerPlayerIndex = 1
-      setTimeout(computerMove, 3000)
-    } else if (currentPlayer==='Computer 2'){
-      computerPlayerIndex = 2
-      setTimeout(computerMove, 3000)
-    }
-
+    gameStatusDisplay()
+    checkForComputerMove();
     var winner = checkWin();
     if (winner) {
         alert(`${winner} has won the game!`)
     }
-
 }
+
+function gameStatusDisplay(){
+  if (currentPlayer===playerName) {
+    gameStatus.innerText = `It's your turn!`
+  } else {
+    gameStatus.innerText = `${currentPlayer} is making a move...`
+  }
+}
+
+function checkForComputerMove(){
+      if (currentPlayer==='Computer 1') {
+        computerPlayerIndex = 1
+        setTimeout(computerMove, 3000)
+      } else if (currentPlayer==='Computer 2'){
+        computerPlayerIndex = 2
+        setTimeout(computerMove, 3000)
+      }
+}
+
 
 function changePlayer(){
     if (playerIndex === indexOfLastPlayer) {
@@ -266,8 +292,6 @@ function nextPlayerDisplay(){
 }
 
 function drawCards(numOfCards, deck) {
-    console.log(`draw cards triggered, draw ${numOfCards}`);
-
     for (var i = 0; i < numOfCards; i++) {
         var randomIndex = getRandomInt(cardPile.length)
         var randomCard = cardPile[randomIndex];
@@ -360,7 +384,7 @@ function computerMove() {
 
     if (!moveWasMade) {
         drawCards(1, computerDeck);
-        displayLatestMove(`Computer drew a card`)
+        displayLatestMove(`${currentPlayer} drew a card`)
         renderComputerDeck(1);
         renderComputerDeck(2);
         changePlayer();
@@ -370,9 +394,12 @@ function computerMove() {
 
 
 function checkWin() {
-    if (computerDeck.length === 0) {
+    if (computer1Deck.length === 0) {
         currentPlayer = null;
         return `computer`
+    } else if (computer2Deck.length === 0) {
+          currentPlayer = null;
+          return `user`
     } else if (playerDeck.length === 0) {
         currentPlayer = null;
         return `user`
