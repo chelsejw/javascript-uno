@@ -93,8 +93,8 @@ h2 {
 	flex: 1;
 }
 
-.latest-card{
-	color: #BEBBB6
+#latest-card{
+	margin: 0 0 30px 0;
 }
 
 

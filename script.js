@@ -48,10 +48,14 @@ function refreshDisplays(){
   renderComputerDeck(1);
   renderComputerDeck(2);
   showCurrentPlayer();
-  gameStatusDisplay()
+  gameStatusDisplay();
+  showLatestCard();
 }
 
 function restartGame(){
+  playerDeck = [];
+  computer1Deck = [];
+  computer2Deck = [];
   generateDeck(defaultColors);
   givePlayersDeck(7);
   refreshDisplays();
@@ -64,6 +68,13 @@ function drawOne() {
     renderPlayerDeck();
     refreshDisplays();
     checkForComputerMove();
+}
+
+function showLatestCard(){
+  var card = cardInPlay[cardInPlay.length-1];
+  var latestCardDiv = document.getElementById('latest-card')
+  latestCardDiv.style.backgroundColor = card.color;
+  latestCardDiv.innerText = `${card.color} ${card.value}`
 }
 
 
@@ -270,6 +281,7 @@ function playThisCard(card, deck) {
     var winner = checkWin();
     if (winner) {
         alert(`${winner} has won the game!`)
+        refreshScoreboard();
         gameStatus.innerText = `${winner} has won! Going to the next round in 5 seconds...`
         setTimeout(restartGame, 5000)
     } else {
