@@ -4,6 +4,15 @@ body {
 	color: #fffdf6;
 }
 
+.page-container {
+  position: relative;
+  min-height: 100vh;
+}
+
+.container-wrap{
+	padding-bottom: 2rem;
+}
+
 h1,h2 {
 	text-transform: uppercase;
 	letter-spacing: 4px;
@@ -459,12 +468,13 @@ header {
 }
 
 footer {
-	position: fixed;
+	position: absolute;
+	bottom: 0;
 	width: 100%;
 	text-align: center;
-	bottom: 20px;
+	height: 2rem;
 	text-transform:uppercase;
-	font-size: 0.7rem;
 	letter-spacing: 2px;
+	font-size: 0.7rem;
 	color: grey;
 }

@@ -12,155 +12,162 @@
 
 <body>
 
-    <header>
-        <h1>JAVASCRIPT UNO</h1>
-    </header>
+    <div class="page-container">
+        <div class="container-wrap">
+            <header>
+                <h1>JAVASCRIPT UNO</h1>
+            </header>
 
-    <div class="starter">
+            <div class="starter">
 
-        <h2>Welcome to Javascript Uno!</h2>
-        <p>
-            To start, please enter your name: <input id="name-input" type="text" name="" placeholder="">
-        </p>
+                <h2>Welcome to Javascript Uno!</h2>
+                <p>
+                    To start, please enter your name: <input id="name-input" type="text" name="" placeholder="">
+                </p>
 
-        <p>
-            Next, choose if you want default colors or your own custom colors for your cards.
-        </p>
-        <p>
-          <button value="defaultColors" id='default-btn'>default</button>  <button value="customColors" id='custom-btn'>Custom Colors</button>
+                <p>
+                    Next, choose if you want default colors or your own custom colors for your cards.
+                </p>
+                <p>
+                    <button value="defaultColors" id='default-btn'>default</button> <button value="customColors" id='custom-btn'>Custom Colors</button>
 
-        </p>
+                </p>
 
-        <div id="custom-col-container" class="hide">
-          <p>
-            You can use name colors (advisable!) or hex codes. If the input background does not change, or is white, it is not a valid color.
-          </p>
-          <input class="custom-input" id="custom-col-1" placeholder="color #1"/>
-          <input class="custom-input" id="custom-col-2" placeholder="color #2"/>
-          <input class="custom-input" id="custom-col-3" placeholder="color #3"/>
-          <input class="custom-input" id="custom-col-4" placeholder="color #4"/>
+                <div id="custom-col-container" class="hide">
+                    <p>
+                        You can use name colors (advisable!) or hex codes. If the input background does not change, or is white, it is not a valid color.
+                    </p>
+                    <input class="custom-input" id="custom-col-1" placeholder="color #1" />
+                    <input class="custom-input" id="custom-col-2" placeholder="color #2" />
+                    <input class="custom-input" id="custom-col-3" placeholder="color #3" />
+                    <input class="custom-input" id="custom-col-4" placeholder="color #4" />
+                </div>
+
+                <p>
+                    Once you have entered a name and set your deck colors, press the start button!
+                </p>
+
+                <p>
+                    <button id="start-btn">Start</button>
+
+                    <div id="error-container" class="hide">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span id="error-message"></span>
+                    </div>
+
+
+            </div>
+
+
+            <div class="display hide">
+
+                <!--FIRST COLUMN-->
+                <div class="left-display">
+                    <div class="display-row">
+                        Latest Move:
+                        <br /><span class="value" id="latest-move"></span>
+                    </div>
+                    <div class="display-row">
+                        Current Turn
+                        <br /><span class="value" id="current-player"></span>
+                    </div>
+                    <div class="display-row">
+                        Next Player
+                        <br /><span class="value" id="next-player"></span>
+                    </div>
+
+                </div>
+
+                <!--SECOND COLUMN-->
+                <div id="cards-in-play-container" class="deck">
+                    <h2 id="current-status"></h2>
+                    <h2 id="latest-card" class="value"></h2>
+                    <div id="cards-in-play">
+                    </div>
+                    <div class="display-row">
+                        <button id='drawcard-btn'>draw</button>
+                    </div>
+
+                </div>
+
+                <!--THIRD COLUMN-->
+                <div class="right-display">
+
+                    <div class="display-row">
+                        <div id="scoreboard">
+                            <h2>Scoreboard</h2>
+                            <p><span class="user-name"></span>'s Score: <span id="user-score" class="value">0</span></p>
+                            <p>Computer 1 Score: <span id="com1-score" class="value">0</span></p>
+                            <p>Computer 2 Score: <span id="com2-score" class="value">0</span></p>
+                        </div>
+
+                    </div>
+
+                    <div class="display-row">
+
+                    </div>
+                </div>
+
+
+            </div>
+
+            <!--GAME BODY CONSISTS OF TWO COLUMNS-->
+
+            <div class="color-picker hide">
+                <h2>Pick a color!</h2>
+
+                <div id="generated-colorpicker">
+
+                </div>
+
+
+                <button id="confirm"><i class="fas fa-check-circle"></i></button>
+            </div>
+
+            <div class="game-body">
+
+                <div id="col-left">
+
+
+                    <!--PLAYER DECK HERE-->
+                    <div id="player-display" class="deck">
+                        <h2><span class="user-name"></span>'s Deck</h2>
+                        <div id="player-deck">
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!--OPPONENT DECK HERE-->
+                <div id="col-right">
+                    <div id="computer-display" class="deck">
+                        <h2>Computer 1 Deck</h2>
+                        <div id="computer1-deck">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="col-right">
+                    <div id="computer-display" class="deck">
+                        <h2>Computer 2 Deck</h2>
+                        <div id="computer2-deck">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
-        <p>
-          Once you have entered a name and set your deck colors, press the start button!
-        </p>
-
-        <p>
-          <button id="start-btn">Start</button>
-
-          <div id="error-container" class="hide">
-            <i class="fas fa-exclamation-triangle"></i>
-          <span id="error-message"></span>
-        </div>
-
-
+        
+        <footer>
+            Best viewed on Chrome.
+            <br />Copyright Chelsea Ee. 2020
+        </footer>
     </div>
 
 
-    <div class="display hide">
-
-        <!--FIRST COLUMN-->
-        <div class="left-display">
-            <div class="display-row">
-                Latest Move:
-                <br /><span class="value" id="latest-move"></span>
-            </div>
-            <div class="display-row">
-                Current Turn
-                <br /><span class="value" id="current-player"></span>
-            </div>
-            <div class="display-row">
-                Next Player
-                <br /><span class="value" id="next-player"></span>
-            </div>
-
-        </div>
-
-        <!--SECOND COLUMN-->
-        <div id="cards-in-play-container" class="deck">
-            <h2 id="current-status"></h2>
-            <h2 id="latest-card" class="value"></h2>
-            <div id="cards-in-play">
-            </div>
-            <div class="display-row">
-                <button id='drawcard-btn'>draw</button>
-            </div>
-
-        </div>
-
-        <!--THIRD COLUMN-->
-        <div class="right-display">
-
-            <div class="display-row">
-                <div id="scoreboard">
-                    <h2>Scoreboard</h2>
-                    <p><span class="user-name"></span>'s Score: <span id="user-score" class="value">0</span></p>
-                    <p>Computer 1 Score: <span id="com1-score" class="value">0</span></p>
-                    <p>Computer 2 Score: <span id="com2-score" class="value">0</span></p>
-                </div>
-
-            </div>
-
-            <div class="display-row">
-
-            </div>
-        </div>
-
-
-    </div>
-
-    <!--GAME BODY CONSISTS OF TWO COLUMNS-->
-
-    <div class="color-picker hide">
-        <h2>Pick a color!</h2>
-
-        <div id="generated-colorpicker">
-
-        </div>
-
-
-        <button id="confirm"><i class="fas fa-check-circle"></i></button>
-    </div>
-
-    <div class="game-body">
-
-        <div id="col-left">
-
-
-            <!--PLAYER DECK HERE-->
-            <div id="player-display" class="deck">
-                <h2><span class="user-name"></span>'s Deck</h2>
-                <div id="player-deck">
-                </div>
-            </div>
-        </div>
-
-
-
-        <!--OPPONENT DECK HERE-->
-        <div id="col-right">
-            <div id="computer-display" class="deck">
-                <h2>Computer 1 Deck</h2>
-                <div id="computer1-deck">
-                </div>
-            </div>
-        </div>
-
-        <div id="col-right">
-            <div id="computer-display" class="deck">
-                <h2>Computer 2 Deck</h2>
-                <div id="computer2-deck">
-
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <footer>
-        Best viewed on Chrome.
-        <br />Copyright Chelsea Ee. 2020
-    </footer>
     <script type="text/javascript" src="dom.js"></script>
     <script type="text/javascript" src="script.js"></script>
 </body>

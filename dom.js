@@ -8,9 +8,7 @@ function renderComputerDeck(comNo) {
         computerDeck = computer2Deck;
         computerDeckDiv = document.getElementById(`computer2-deck`);
     }
-
     computerDeckDiv.innerText = "";
-
     for (var i = 0; i < computerDeck.length; i++) {
         var cardContainer = document.createElement('div');
         cardContainer.classList.add('card-container');
@@ -46,7 +44,7 @@ function renderColorCard(value, color) {
     cardInner.appendChild(bottomRight)
     card.style.backgroundColor = color;
 
-    //If value is a string, render an action OR draw2 card.
+    //If value of the card is a string, render an action OR draw2 card.
     if (value === '+2') {
         topLeft.classList.add('draw');
         middle.classList.add(`draw-middle`);
@@ -61,7 +59,6 @@ function renderColorCard(value, color) {
         var icon1 = document.createElement(`i`)
         var icon2 = document.createElement(`i`)
         var icon3 = document.createElement(`i`)
-
         icon1.classList.add(`fas`)
         icon2.classList.add(`fas`)
         icon3.classList.add(`fas`)
@@ -129,13 +126,6 @@ function renderWildCardIcon() {
 }
 
 
-function createDiv(classes) {
-    var newDiv = document.createElement('div')
-    newDiv.classList.value = classes
-    return newDiv
-}
-
-
 function renderWildColorPicker() {
     var colorRow = createDiv(`color-row`)
     for (var iconNo = 0; iconNo < usersColors.length; iconNo++) {
@@ -152,7 +142,7 @@ function renderWildColorPicker() {
 }
 
 
-function toggleDisplay(element) {
+function toggleHide(element) {
     if (element.classList.value.includes('hide')) {
         element.classList.remove('hide');
     } else {
@@ -160,17 +150,13 @@ function toggleDisplay(element) {
     }
 }
 
-
 function renderCardInPlay() {
-
     var cardsInPlayDiv = document.getElementById('cards-in-play')
     cardsInPlayDiv.innerText = "";
-
-    var latestCard = getLatestCard()
+    var latestCard = cardInPlay[cardInPlay.length-1]
     var cardType = latestCard.type;
     var cardColor = latestCard.color;
     var cardValue = latestCard.value;
-
     if (cardType === `wild`) {
         var newCard = renderWildCard(cardValue);
         newCard.classList.add('latest-card-image')
@@ -182,32 +168,29 @@ function renderCardInPlay() {
     cardsInPlayDiv.appendChild(newCard);
 }
 
-function getLatestCard() {
-    return cardInPlay[cardInPlay.length - 1];
-}
 
 function renderPlayerDeck() {
-
-    //DOM
     var playerDeckDisplay = document.getElementById('player-deck')
     playerDeckDisplay.innerText = "";
     for (var i = 0; i < playerDeck.length; i++) {
-
         //Loop through the player deck and get the following values.
         var cardType = playerDeck[i].type;
         var cardColor = playerDeck[i].color;
         var cardValue = playerDeck[i].value;
-        playerDeck[i].indexInDeck = i; //Assign an updated index value to card
+        playerDeck[i].indexInDeck = i; //Assign an updated indexInDeck value to card
 
-        //If card type is wild, render wildcard accordingly.
+        //Render the card according to its type.
         if (cardType === `wild`) {
             var card = renderWildCard(cardValue);
         } else if (cardType === `color`) {
             var card = renderColorCard(cardValue, cardColor)
         }
 
+        //Give the card an ID so that we can get its values from handleCardClick functions.
         card.id = `${cardType}-${cardColor}-${cardValue}-${playerDeck[i].indexInDeck}`
         card.addEventListener(`click`, handleCardClick)
+
+        //Add the new card element to the display.
         playerDeckDisplay.appendChild(card);
     }
 }
@@ -215,7 +198,6 @@ function renderPlayerDeck() {
 
 
 ///START GAME FUNCTIONS
-
 var nameInput = document.getElementById('name-input');
 var defaultColorBtn = document.getElementById('default-btn')
 var customColorBtn = document.getElementById('custom-btn')
@@ -223,87 +205,105 @@ var errorContainer = document.getElementById('error-container')
 var errorMsg = document.getElementById('error-message')
 var startBtn = document.getElementById('start-btn')
 var customColContainer = document.getElementById('custom-col-container')
+var chosenOption = null;
 
+//Add click listeners to the buttons.
 startBtn.addEventListener('click', startButton)
-defaultColorBtn.addEventListener('click', defaultOrCustom)
-customColorBtn.addEventListener('click', defaultOrCustom)
+defaultColorBtn.addEventListener('click', chooseDeckType)
+customColorBtn.addEventListener('click', chooseDeckType)
 
+//Add change event listeners to the custom color inputs.
 var customColInputs = document.querySelectorAll('.custom-input');
-
 for (var i = 0; i < customColInputs.length; i++) {
     customColInputs[i].addEventListener('change', showCustomCol);
 }
 
-var chosenOption = null;
-
-
+//Color inputs should change its background color according to the input.
 function showCustomCol() {
     var input = this.value;
     this.style.backgroundColor = input
 }
 
+//Gets the four custom color inputs. Returns false if any of the inputs are not valid, if not, returns an array of the selected colors.
 function getCustomCols() {
     var newArr = []
     for (var i = 0; i < customColInputs.length; i++) {
         var inputValue = customColInputs[i].value.toLowerCase();
-        if (inputValue === "" || inputValue === "white" || inputValue === "#ffffff") {
+        //if input is not a valid CSS color, is empty, or is white, then return false
+        if (!isColor(inputValue) || inputValue === "" || inputValue === "white" || inputValue === "#ffffff") {
             return false
         }
         newArr.push(customColInputs[i].value);
     }
-
-    if (newArr.length === 4) {
-        return newArr;
-    }
+    return newArr;
 }
 
+// Triggered when user clicks the start button.
 function startButton() {
 
+  //If there is a chosen option & name input is not empty,
     if (chosenOption && nameInput.value !== "") {
+
+      //Assign player name the nameInput
         playerName = nameInput.value
+
+        //If the user chose custom colors, and they had valid inputs, assign the colors to the usersColors & start the game
         if (chosenOption === "customColors") {
             var valid = getCustomCols();
             if (valid) {
                 usersColors = getCustomCols();
                 startGame();
+
+            //If the custom color inputs were not valid, show error message.
             } else {
+              //If error div is hidden, show it.
                 if (errorContainer.classList.value.includes('hide')) {
                     errorContainer.classList.remove('hide');
                 }
                 errorMsg.innerText = "Please give a valid color for all four inputs."
             }
+        //If user chose default colors, assign default colors to the usersColors and start game.
         } else if (chosenOption === "defaultColors") {
             usersColors = defaultColors;
             startGame();
         }
     } else {
-        //If both inputs are not complete: show the error div if it's hidden.
+        //If both inputs are not complete...
+        //Show the error div if it's hidden.
         if (errorContainer.classList.value.includes('hide')) {
             errorContainer.classList.remove('hide');
         }
+        //Error message if no deck color option was chosen.
         if (!chosenOption) {
             errorMsg.innerText = "Sorry, please choose an option for your colors."
+        //Error message if name input is empty.
         } else if (nameInput.value === "") {
             errorMsg.innerText = "Please enter a name."
+        //Error message if both name input is empty & no deck color option was chosen.
         } else if (!chosenOption && nameInput.value === "") {
             errorMsg.innerText = 'Sorry, please ensure you have chosen a color option & entered your name.'
         }
     }
 }
 
-function defaultOrCustom() {
+//Triggered whenever a deckColor option is clicked (default or custom)
+function chooseDeckType() {
+  //Remove active button class according to what was the previous selected button.
     if (chosenOption === 'customColors' && this.value === "defaultColors") {
         document.getElementById('custom-btn').classList.remove('active-btn')
     } else if (chosenOption === 'defaultColors' && this.value === 'customColors') {
         document.getElementById('default-btn').classList.remove('active-btn')
     }
-
-    chosenOption = this.value;
+    //Assign the value of the button to chosenOption.
+    chosenOption = this.value
+    //Make this the active button.
     this.classList.add('active-btn')
+    //If the user selects customColors, show custom color inputs if they are hidden.
     if (chosenOption === 'customColors') {
         if (customColContainer.classList.value.includes('hide')) {
             customColContainer.classList.remove('hide')
         }
+    //If the user selects defaultColors, hide custom color inputs if they are showing up.
     } else if (chosenOption === 'defaultColors')
         if (!customColContainer.classList.value.includes('hide')) {
             customColContainer.classList.add('hide')
