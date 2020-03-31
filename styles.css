@@ -16,62 +16,87 @@ h1 {
 
 h2 {
 	font-size: 1.4rem;
-	color: #46413B;
+	color: grey;
+}
+
+.value {
+	background-color: #36454f;
+	color: white;
+	padding: 10px;
+	border-radius: 10px;
+	margin-top: 5px;
+	display: inline-block;
+}
+
+#scoreboard .value {
+	margin-left: 10px;
+	margin-top: -5px;
+}
+
+#scoreboard h2 {
+	margin-top:0
 }
 
 
-.row1 {
+.display {
 	display: flex;
 	flex-direction: row;
-	justify-content: center;
-	align-items: center;
+	margin-bottom: 40px;
 }
 
-.row1col1 {
+.left-display {
 	flex: 1;
+	display: flex;
+	flex-direction: column;
+}
+
+.right-display{
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+}
+
+.display-row {
+	color: black;
+	font-size: 1.2rem;
+	text-transform: uppercase;
+	padding: 20px;
 	text-align: center;
 }
 
 #drawcard-btn {
 	font-size: 1.5rem;
-	border: 1px solid black;
+	color: white;
+	background-color: #36454f;
 	padding: 10px 40px;
-	box-shadow: 3px 8px 10px rgba(0,0,0,0.5);
+	box-shadow: 2px 6px 5px rgba(0,0,0,0.5);
 	position: relative;
-	text-transform: lowercase;
+	text-transform: uppercase;
 	letter-spacing: 3px;
 	transition-duration: 0.2s;
 	border-radius: 20px;
-	margin: 20px;
+	border: none;
 }
 
 #drawcard-btn:hover{
-	top: 2px;
-	left: 5px;
-	box-shadow: 1px 3px black;
+	top: 1px;
+	left: 4px;
+	box-shadow: 1px 2px black;
 }
 
 #drawcard-btn:focus{
 	outline: none;
 }
 
-#cards-in-play {
+#cards-in-play-container {
 	text-align: center;
-	flex: 2
+	flex: 1;
 }
-
 
 .latest-card{
 	color: #BEBBB6
 }
 
-
-
-#scoreboard {
-	text-align: right;
-	padding-right: 30px;
-	flex: 1;
-}
 
 header {
   height: 140px;
@@ -149,6 +174,10 @@ header {
 	flex: 1
 }
 
+#current-status{
+	font-style: italic;
+}
+
 .latest-card-image {
 	transform: rotate(30deg);
 	margin-top: 70px;
@@ -156,9 +185,6 @@ header {
 
 #player-display {
 	margin: 3%;
-}
-
-#opponent-deck {
 }
 
 .deck {

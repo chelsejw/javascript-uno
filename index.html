@@ -17,24 +17,71 @@
     </header>
 
 
-<div class="row1">
-  <div class="row1col1">
-    <button id='drawcard-btn'>draw card</button>
+<div class="display">
+
+  <!--FIRST COLUMN-->
+  <div class="left-display">
+    <div class="display-row">
+      Latest Move:
+      <br /><span class="value" id="latest-move"> Gold 5 </span>
+    </div>
+    <div class="display-row">
+      Current Turn
+      <br /><span class="value" id="current-player">Computer 1</span>
+    </div>
+    <div class="display-row">
+      Next Player
+      <br /><span class="value" id="next-player">User</span>
+    </div>
+
   </div>
+
+  <!--SECOND COLUMN-->
   <div id="cards-in-play-container" class="deck">
-    <h2>Current Move: <span id="latest-move"></span></h2>
-    <h2>Current Player: <span id="current-player"></span></h2>
+    <h2 id="current-status">Waiting for player move...</h2>
     <div id="cards-in-play">
+      <div class="card-container" id="latest-card">
+          <div class="card">
+              <div class="number top-left">
+                  5
+              </div>
+              <div class="card-ring">
+              </div>
+              <div class="number-middle middle">
+                  5
+              </div>
+              <div class="number bottom-right">
+                  5
+              </div>
+          </div>
+      </div>
+    </div>
+    <div class="display-row">
+      <button id='drawcard-btn'>draw</button>
+    </div>
+
+  </div>
+
+  <!--THIRD COLUMN-->
+  <div class="right-display">
+
+    <div class="display-row">
+      <div id="scoreboard">
+      <h2>Scoreboard</h2>
+        <p>User Score: <span class="value">1</span></p>
+        <p>Computer 1 Score: <span class="value">1</span></p>
+        <p>Computer 2 Score: <span class="value">1</span></p>
+      </div>
+
+    </div>
+
+    <div class="display-row">
+
     </div>
   </div>
 
-  <div id="scoreboard">
-    <h2>User Score:</h2> 1
-    <h2>Computer Score:</h2> 1
-  </div>
 
 </div>
-    <!--CARDS IN PLAY DISPLAY-->
 
     <!--GAME BODY CONSISTS OF TWO COLUMNS-->
 
@@ -58,7 +105,66 @@
             <div id="player-display" class="deck">
               <h2>Your Deck</h2>
               <div id="player-deck">
-
+                <div class="card-container" id="latest-card">
+                    <div class="card">
+                        <div class="number top-left">
+                            5
+                        </div>
+                        <div class="card-ring">
+                        </div>
+                        <div class="number-middle middle">
+                            5
+                        </div>
+                        <div class="number bottom-right">
+                            5
+                        </div>
+                    </div>
+                </div>
+                <div class="card-container" id="latest-card">
+                    <div class="card">
+                        <div class="number top-left">
+                            5
+                        </div>
+                        <div class="card-ring">
+                        </div>
+                        <div class="number-middle middle">
+                            5
+                        </div>
+                        <div class="number bottom-right">
+                            5
+                        </div>
+                    </div>
+                </div>
+                <div class="card-container" id="latest-card">
+                    <div class="card">
+                        <div class="number top-left">
+                            5
+                        </div>
+                        <div class="card-ring">
+                        </div>
+                        <div class="number-middle middle">
+                            5
+                        </div>
+                        <div class="number bottom-right">
+                            5
+                        </div>
+                    </div>
+                </div>
+                <div class="card-container" id="latest-card">
+                    <div class="card">
+                        <div class="number top-left">
+                            5
+                        </div>
+                        <div class="card-ring">
+                        </div>
+                        <div class="number-middle middle">
+                            5
+                        </div>
+                        <div class="number bottom-right">
+                            5
+                        </div>
+                    </div>
+                </div>
               </div>
             </div>
         </div>
@@ -70,7 +176,33 @@
             <div id="computer-display" class="deck">
                 <h2>Opponent Deck</h2>
                 <div id="computer-deck">
-
+                  <div class="card-container">
+                      <div class="card back-card">
+                          <div class="back-ring card-ring">
+                          </div>
+                          <div class="back-middle middle">
+                              UNO
+                          </div>
+                      </div>
+                  </div>
+                  <div class="card-container">
+                      <div class="card back-card">
+                          <div class="back-ring card-ring">
+                          </div>
+                          <div class="back-middle middle">
+                              UNO
+                          </div>
+                      </div>
+                  </div>
+                  <div class="card-container">
+                      <div class="card back-card">
+                          <div class="back-ring card-ring">
+                          </div>
+                          <div class="back-middle middle">
+                              UNO
+                          </div>
+                      </div>
+                  </div>
                 </div>
             </div>
         </div>
@@ -83,7 +215,6 @@
     </footer>
     <script type="text/javascript" src="dom.js"></script>
     <script type="text/javascript" src="script.js"></script>
-
 </body>
 
 </html>
