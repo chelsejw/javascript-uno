@@ -220,6 +220,12 @@ header {
 	margin: 0 0 30px 0;
 }
 
+.latest-card-image {
+	margin-top: 70px;
+	animation: slideInUp 0.5s
+}
+
+
 #current-status{
 	font-style: italic;
 	position: relative;
@@ -292,10 +298,6 @@ header {
 	flex: 1
 }
 
-.latest-card-image {
-	transform: rotate(30deg);
-	margin-top: 70px;
-}
 
 #player-deck .card-container:hover {
 	box-shadow: rgba(0, 0, 0, 0.9) 3px 3px 5px;
