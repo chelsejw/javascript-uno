@@ -13,8 +13,8 @@ Didn't really map out what should happen whenever a player draws a card/ compute
 I think I planned my main data structures (e.g. card objects) well such that most of it can be used simply across many functions.
 
 
-### Code and Code Design
-What in my code and program design in the project would I do differently next time?
+## Code and Code Design
+### What in my code and program design in the project would I do differently next time?
 
 The way I wrote/render my HTML card elements. There are multiple div layers for one card, and I didn't know how to save the whole chunk as a variable (like components in React), I ended up writing a ton of doc.createElements.
 
