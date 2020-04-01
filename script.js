@@ -656,17 +656,10 @@ function renderComputerDeck(comNo) {
     }
     computerDeckDiv.innerText = "";
     for (var i = 0; i < computerDeck.length; i++) {
-        var cardContainer = document.createElement('div');
-        cardContainer.classList.add('card-container');
-        var backCard = document.createElement('div');
-        backCard.classList.add('card');
-        backCard.classList.add('back-card');
-        var backCardRing = document.createElement('div');
-        backCardRing.classList.add('back-ring');
-        backCardRing.classList.add('card-ring');
-        var unoText = document.createElement('div');
-        unoText.classList.add('back-middle')
-        unoText.classList.add('middle')
+        var cardContainer = createDiv('card-container')
+        var backCard = createDiv('card back-card')
+        var backCardRing = createDiv('back-ring card-ring')
+        var unoText = createDiv('back-middle middle')
         unoText.innerText = "UNO";
         cardContainer.appendChild(backCard);
         backCard.appendChild(backCardRing);
