@@ -15,3 +15,4 @@ Exceptions in my version:
 ## Occasional Bugs
 * There are some errors that occur, specifically "...cannot read length property of undefined at line 471" within the console. Haven't figured out why or which conditions cause it to occur yet.
 * Winner display might show player as "null" instead of the winner.
+* Card doesn't get played when last card from user is a wildcard.
