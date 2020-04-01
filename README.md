@@ -12,7 +12,6 @@ Exceptions in my version:
 * If starter card is a wildcard, a color is randomly chosen.
 * There is also no need to say Uno. Haha.
 
-## Bugs
-* There are some errors that occur, specifically "...cannot read length property of undefined at line 471" within the console.
-I haven't figured out why or which conditions causes it to occur yet.
-* Occasionally, when there is a winner, the winner display might show player as "null" instead of the winner.
+## Occasional Bugs
+* There are some errors that occur, specifically "...cannot read length property of undefined at line 471" within the console. Haven't figured out why or which conditions cause it to occur yet.
+* Winner display might show player as "null" instead of the winner.
