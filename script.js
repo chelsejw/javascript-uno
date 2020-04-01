@@ -168,9 +168,11 @@ function newGame() {
 
 //Draw one card from the pile, is only called when user clicks on DRAW button.
 function drawOne() {
+  if (currentPlayer===playerName) {
     drawCards(1, playerDeck);
     changePlayer();
     refreshDisplays();
+  }
 }
 
 function generateDeck() {
