@@ -108,7 +108,6 @@ function gameStatusDisplay() {
           gameStatus.style.animation = "lightSpeedIn 0.5s, pulse 1s infinite 0.5s";
         }
     }
-
 }
 
 //Function that targets latest-card div (under the game status div and shows the last card in the cardInPlay array.)
@@ -359,7 +358,8 @@ function playThisCard(card, deck) {
 
     //If there is a winner, show it on gamestatus, refresh the scoreboard & reset game in 5 seconds.
     if (winner) {
-        gameStatus.innerText = `${winner} has won! Going to the next round in 5 seconds...`
+        latestMove =`${winner} has won! Going to the next round in 5 seconds...`
+        displayLatestMove();
         refreshScoreboard();
         return setTimeout(newGame, 5000)
         //If there is no winner move on to the next player & refresh displays.
