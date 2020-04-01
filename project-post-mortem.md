@@ -2,7 +2,7 @@
 
 ### What in my process and approach to this project would I do differently next time?
 
- Really plan out how I want my UI to look like first, and stick with it, as I had to rework it a few times.
+Really plan out how I want my UI to look like first, and stick with it, as I had to rework it a few times.
 
 Try to avoid having so many global variables.
 
@@ -16,7 +16,7 @@ I think I planned my main data structures (e.g. card objects) well such that mos
 ### Code and Code Design
 What in my code and program design in the project would I do differently next time?
 
-The way I wrote/render my HTML card elements. Cause there are a lot of div layers for one card, and I didn't know how to kinda save the structure as a variable (like components in React), I ended up writing a ton of doc.createElements.
+The way I wrote/render my HTML card elements. There are multiple div layers for one card, and I didn't know how to save the whole chunk as a variable (like components in React), I ended up writing a ton of doc.createElements.
 
 
 ```
@@ -40,15 +40,11 @@ if (value === `skip`) {
 
 ```
 
-^^The above code was to render some elements of my action cards. I was weirdly adamant about using pure css/html, and could have saved some time if I just used pngs for my skip/reverse icons.
+The above code was to render some elements of my action cards, using FontAwesome classes. I was weirdly adamant about using pure css/html, and could have saved some time if I just used pngs for my skip/reverse icons.
 
-As for program design, my CSS definitely was quite haphazardly planned as I was focused on creating the Uno cards, but didn't think much about how the app would look as a whole.
+As for program design, my CSS was quite haphazardly planned as I was focused on creating the Uno cards, but didn't think much about how the app would look as a whole. So my cards ended up being too big, and my user can't see the whole game even at full viewport height, they have to scroll down to look at their own/opponents' cards.
 
-So my cards ended up being too big, and my user can't see the whole game even at full viewport height, they have to scroll down to look at their own/opponents' cards.
-
-Because the positioning of the several small elements within the cards are dependent on the parent's width/height, it's not an easy task to adjust the cards' sizing.
-
-I would definitely aim to make my CSS cards dynamic. Probably gotta read about CSS calculations.
+Because the positioning of several small elements within the cards are dependent on the parent's width/height, it's not an easy task to adjust the cards' sizing. I would definitely aim to make my CSS cards dynamic. Probably gotta read about CSS calculations.
 
 ### What in my code and program design in the project went well? Is there anything I would do the same next time?
 
@@ -99,7 +95,7 @@ function playThisCard(card, deck) {
 ### What habits did I have during this unit that I can improve on?
 
 * Remembered the wrong due date, spent my weekend playing Animal Crossing....
-* Worked really hard for the first two projects, then got burnt out.
+* Worked really hard for the first two assignments, then got burnt out.
 * If something looks too daunting I just didn't try.
 * I really just use loops for sooo many things.
 
