@@ -1,7 +1,9 @@
+/********************** CONTAINER *****************/
+
 body {
 	font-family: 'Nunito', sans-serif;
   text-align: center;
-	color: #fffdf6;
+	color: black;
 }
 
 .page-container {
@@ -12,6 +14,9 @@ body {
 .container-wrap{
 	padding-bottom: 2rem;
 }
+
+/********************** GENERAL STYLES *****************/
+
 
 h1,h2 {
 	text-transform: uppercase;
@@ -28,13 +33,57 @@ h2 {
 	color: grey;
 }
 
-.starter {
-	color: black;
-}
 
 button {
 	border:none;
 }
+
+button:focus, input:focus {
+	outline: none;
+}
+
+input {
+	border-style: none none solid none;
+	border-color: black;
+	width: 150px;
+	font-size: 1em;
+	letter-spacing: 3px;
+	margin-left: 0.5em;
+	padding-bottom: 5px;
+	transition-duration: 0.3s;
+	color: #36454f;
+}
+
+input:focus{
+	width: 200px;
+}
+
+input:enabled{
+	text-transform: none;
+}
+
+input::placeholder {
+	color: grey;
+	text-transform: lowercase;
+	text-align: center;
+}
+
+/********************** HEADER *****************/
+
+
+header {
+  height: 140px;
+  width: 100%;
+  margin: 0 auto;
+  line-height: 140px;
+  font-size: 4rem;
+  text-align: center;
+	letter-spacing: 3px;
+}
+
+
+/********************** STARTER INSTRUCTIONS DIV *****************/
+
 
 .starter button {
 	padding: 10px;
@@ -48,11 +97,14 @@ button {
 	position: relative;
 }
 
-button:focus{
-	outline: none;
+.starter button:focus{
 	top: 3px;
 	left: 1px;
 	box-shadow: 1px 1px black;
+}
+
+.starter button:hover {
+	background-color: grey;
 }
 
 #start-btn {
@@ -62,6 +114,9 @@ button:focus{
 }
 
 #start-btn:hover {
+	top: 1px;
+	left: 3px;
+	box-shadow: 1px 1px black;
 	background-color: grey;
 }
 
@@ -70,8 +125,9 @@ button:focus{
 	color: darkred;
 }
 
-.starter button:hover {
-	background-color: grey;
+
+#player-display {
+	margin: 3%;
 }
 
 .active-btn {
@@ -79,33 +135,29 @@ button:focus{
 	color: white;
 }
 
-input {
-	border-style: none none solid none;
-	border-color: black;
-	width: 150px;
-	font-size: 1rem;
-	letter-spacing: 3px;
-	margin-left: 0.5em;
-	padding-bottom: 5px;
-	transition-duration: 0.5s;
-	color: grey;
+#custom-col-container {
+	margin: 30px 0;
 }
 
-input:focus{
-	width: 200px;
-	outline: none;
+#custom-col-container input {
+	width: 100px;
+	padding: 10px;
+}
+#custom-col-container input:hover {
+	width: 130px;
 }
 
 
-input:enabled{
-	text-transform: none;
+/********************** GAME DISPLAYS DIV *****************/
+
+/**** GENERAL ****/
+
+.display {
+	display: flex;
+	flex-direction: row;
+	margin-bottom: 40px;
 }
 
-input::placeholder {
-	color: grey;
-	text-transform: lowercase;
-	text-align: center;
-}
 
 .value {
 	background-color: #36454f;
@@ -116,21 +168,6 @@ input::placeholder {
 	display: inline-block;
 }
 
-#scoreboard .value {
-	margin-left: 10px;
-	margin-top: -5px;
-}
-
-#scoreboard h2 {
-	margin-top:0
-}
-
-
-.display {
-	display: flex;
-	flex-direction: row;
-	margin-bottom: 40px;
-}
 
 .left-display {
 	flex: 1;
@@ -144,13 +181,15 @@ input::placeholder {
 	flex-direction: column;
 }
 
+
 .display-row {
-	color: black;
 	text-transform: uppercase;
 	padding: 20px;
 	text-align: center;
 }
 
+
+/**** MIDDLE DISPLAY ****/
 #drawcard-btn {
 	font-size: 1.5rem;
 	color: white;
@@ -171,18 +210,6 @@ input::placeholder {
 	box-shadow: 1px 2px black;
 }
 
-#custom-col-container {
-	margin: 30px 0;
-}
-
-#custom-col-container input {
-	width: 100px;
-	padding: 10px;
-}
-#custom-col-container input:hover {
-	width: 130px;
-}
-
 #cards-in-play-container {
 	text-align: center;
 	flex: 1;
@@ -192,23 +219,20 @@ input::placeholder {
 	margin: 0 0 30px 0;
 }
 
-
-header {
-  height: 140px;
-  width: 100%;
-  margin: 0 auto;
-  line-height: 140px;
-  font-size: 4rem;
-  text-align: center;
-	letter-spacing: 3px;
+#current-status{
+	font-style: italic;
 }
 
+/**** RIGHT DISPLAY ****/
+
+#scoreboard .value {
+	margin-left: 5px;
+}
+
+/********************** WILDCARD COLOR PICKER DIV *****************/
 .color-picker{
 	border-radius: 50px;
 	padding: 20px;
-}
-
-.color-row {
 	text-align: center;
 }
 
@@ -223,15 +247,9 @@ header {
 	position: relative;
 }
 
-.hide {
-	display: none;
-}
-
-
 .color-icon:focus, .color-icon:hover{
 	transform: rotate(90deg);
 	box-shadow: none;
-	outline: none;
 	border-radius: 100%;
 }
 
@@ -253,27 +271,27 @@ header {
 	color: green;
 }
 
-.game-body {
+/********************** DECK OF CARDS *****************/
+.deck-body {
 	display: none;
 	flex-direction: row;
 	justify-content: center;
+}
+
+.deck {
+	margin: 10px;
 }
 
 .flex {
 	display: flex;
 }
 
-
-#col-left {
+.user-col {
 	flex: 1;
 }
 
-#col-right {
+.opponent-col {
 	flex: 1
-}
-
-#current-status{
-	font-style: italic;
 }
 
 .latest-card-image {
@@ -281,14 +299,16 @@ header {
 	margin-top: 70px;
 }
 
-#player-display {
-	margin: 3%;
+#player-deck .card-container:hover {
+	box-shadow: rgba(0, 0, 0, 0.9) 3px 3px 5px;
+	left: 3px;
+	top: 3px;
+	transform: rotate(10deg);
 }
 
-.deck {
-	margin: 10px;
-}
+/********************** UNO CARD STYLING *****************/
 
+/****** GENERAL CARD STRUCTURE ********/
 .card-container {
 	font-family: "Arial", sans-serif;
 	margin: 10px;
@@ -330,7 +350,6 @@ header {
   -webkit-text-stroke: 1px black;
 }
 
-
 .middle {
   position: absolute;
 	line-height: 160px;
@@ -352,23 +371,15 @@ header {
 	-webkit-transform: scale(-1, -1);
 	transform: scale(-1, -1);
 }
-
-#player-deck .card-container:hover {
-	box-shadow: rgba(0, 0, 0, 0.9) 3px 3px 5px;
-	left: 3px;
-	top: 3px;
-	transform: rotate(10deg);
-}
-
+/****** NUMBER COLOR CARDS ********/
 .number-middle {
   font-size: 4.5rem;
   left: 45px;
 }
-
 .number {
   font-size: 2rem;
 }
-
+/****** DRAW-X CARDS ********/
 .draw {
   font-size: 1.5rem;
 }
@@ -378,6 +389,7 @@ header {
   left: 30px;
 }
 
+/****** SKIP/REVERSE CARDS ********/
 .action {
   font-size: 1.5rem;
 }
@@ -387,6 +399,7 @@ header {
   left: 40px;
 }
 
+/****** WILD CARDS ********/
 .wild-middle {
   font-size: 3rem;
   left: 20px;
@@ -401,6 +414,8 @@ header {
   background-color: white;
 }
 
+
+/****** WILD CARD ICON STYLING ********/
 .wild-icon {
   width: 22px;
   height: 40px;
@@ -425,6 +440,7 @@ header {
   left: 33px;
   background-color: red;
 }
+
 .wild-left {
   top: 50px;
   left: 20px;
@@ -444,6 +460,7 @@ header {
   box-shadow: 2px 2px black;
 }
 
+/****** BACK FACING CARDS ********/
 .back-card {
   background-color: black;
 }
@@ -467,6 +484,7 @@ header {
   left: 25px;
 }
 
+/********************** FOOTER *****************/
 footer {
 	position: absolute;
 	bottom: 0;
@@ -477,4 +495,9 @@ footer {
 	letter-spacing: 2px;
 	font-size: 0.7rem;
 	color: grey;
+}
+
+/********************** HIDE STYLE *****************/
+.hide {
+	display: none;
 }
