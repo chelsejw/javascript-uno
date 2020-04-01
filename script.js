@@ -56,7 +56,7 @@ function getLatestCard() {
 //Triggered once all user inputs at the start are valid.
 function startGame() {
     document.querySelector(`.starter`).classList.add('hide');
-    document.querySelector(`.game-body`).classList.add('flex')
+    document.querySelector(`.deck-body`).classList.add('flex')
     document.querySelector(`.display`).classList.remove('hide');
 
     //All elements with class "user-name" displays the player's name.
@@ -89,10 +89,14 @@ function gameStatusDisplay() {
     var gameStatus = document.getElementById('current-status')
     if (currentPlayer === playerName) {
         gameStatus.innerText = `It's your turn!`
+        gameStatus.style.animation = "slideInUp 0.5s linear, bounce-4 1s infinite 0.5s"
     } else {
+      gameStatus
         gameStatus.innerText = `${currentPlayer} is making a move...`
+        gameStatus.style.animation = "pulse 1s infinite";
     }
 }
+
 
 //Function that targets latest-card div (under the game status div and shows the last card in the cardInPlay array.)
 function showLatestCard() {
@@ -303,7 +307,7 @@ var colorPicked = function() {
 }
 
 function checkValidMove(card) {
-    var latestCard = cardInPlay[cardInPlay.length-1]
+    var latestCard = cardInPlay[cardInPlay.length - 1]
     if (card.value === latestCard.value) {
         return true
     } else if (card.color === latestCard.color) {
@@ -356,10 +360,10 @@ function playThisCard(card, deck) {
         gameStatus.innerText = `${winner} has won! Going to the next round in 5 seconds...`
         refreshScoreboard();
         return setTimeout(newGame, 5000)
-    //If there is no winner move on to the next player & refresh displays.
+        //If there is no winner move on to the next player & refresh displays.
     } else {
-      changePlayer();
-      refreshDisplays();
+        changePlayer();
+        refreshDisplays();
     }
 }
 
@@ -417,7 +421,7 @@ function showNextPlayer() {
 }
 
 function drawCards(numOfCards, deck) {
-  //For the number of cards you want, remove a random card from the card pile & add it to the specified deck.
+    //For the number of cards you want, remove a random card from the card pile & add it to the specified deck.
     for (var i = 0; i < numOfCards; i++) {
         var randomIndex = getRandomInt(cardPile.length)
         var randomCard = cardPile[randomIndex];
@@ -495,7 +499,7 @@ function computerMove() {
             //If the deck only has wild cards, select a random color from the default colors.
             if (onlyWildCards) {
                 randomColor = getRandomItem(usersColors);
-            //Else if the deck has color cards as well, select a random color from the deck's colors.
+                //Else if the deck has color cards as well, select a random color from the deck's colors.
             } else {
                 randomColor = getRandomItem(deckColors);
             }

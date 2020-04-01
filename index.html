@@ -69,11 +69,11 @@
                     </div>
                     <div class="display-row">
                         Current Turn
-                        <br /><span class="value" id="current-player"></span>
+                        <br /><h2><span id="current-player"></span></h2>
                     </div>
                     <div class="display-row">
                         Next Player
-                        <br /><span class="value" id="next-player"></span>
+                        <br /><h2><span id="next-player"></span></h2>
                     </div>
 
                 </div>
@@ -125,35 +125,33 @@
             </div>
 
             <div class="deck-body">
+                <!--PLAYER DECK HERE-->
+                <div class="deck">
+                    <h2><span class="user-name"></span>'s Deck</h2>
+                    <div id="player-deck">
+                      <!--FOR DOM / RENDER CARDS-->
 
-                <div id="col-left">
-
-
-                    <!--PLAYER DECK HERE-->
-                    <div id="user-col" class="deck">
-                        <h2><span class="user-name"></span>'s Deck</h2>
-                        <div id="player-deck">
-                        </div>
                     </div>
                 </div>
 
-
-
-                <!--OPPONENT DECK HERE-->
-                <div class="opponent-col" class="deck">
-                        <h2>Computer 1 Deck</h2>
-                        <div id="computer1-deck">
-                        </div>
-                    </div>
-
-                <div class="opponent-col" class="deck">
-                        <h2>Computer 2 Deck</h2>
-                        <div id="computer2-deck">
-
-                        </div>
+                <!--COM1 DECK HERE-->
+                <div class="deck">
+                    <h2>Computer 1 Deck</h2>
+                    <div id="computer1-deck">
+                      <!--FOR DOM / RENDER CARDS-->
                     </div>
                 </div>
+
+                <!--COM2 DECK HERE-->
+                <div class="deck">
+                    <h2>Computer 2 Deck</h2>
+                    <div id="computer2-deck">
+                      <!--FOR DOM / RENDER CARDS-->
+                    </div>
+                </div>
+
             </div>
+        </div>
 
         <footer>
             Best viewed on Chrome.

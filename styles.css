@@ -202,6 +202,7 @@ header {
 	transition-duration: 0.2s;
 	border-radius: 20px;
 	border: none;
+	margin-top: 30px;
 }
 
 #drawcard-btn:hover{
@@ -221,6 +222,8 @@ header {
 
 #current-status{
 	font-style: italic;
+	position: relative;
+	animation: bounce-4 1s infinite
 }
 
 /**** RIGHT DISPLAY ****/
@@ -278,19 +281,14 @@ header {
 	justify-content: center;
 }
 
-.deck {
-	margin: 10px;
-}
 
 .flex {
 	display: flex;
 }
 
-.user-col {
-	flex: 1;
-}
 
-.opponent-col {
+.deck {
+	margin: 10px;
 	flex: 1
 }
 
@@ -500,4 +498,139 @@ footer {
 /********************** HIDE STYLE *****************/
 .hide {
 	display: none;
+}
+
+/********************** CSS ANIMATIONS STYLE *****************/
+.bounce-4 {
+		animation-name: bounce-4;
+		animation-timing-function: ease;
+}
+@keyframes bounce-4 {
+		0%   { transform: scale(1,1)    translateY(0); }
+		10%  { transform: scale(1.1,.9) translateY(0); }
+		30%  { transform: scale(.9,1.1) translateY(-10px); }
+		50%  { transform: scale(1,1)    translateY(0); }
+		100% { transform: scale(1,1)    translateY(0); }
+}
+
+@-webkit-keyframes pulse {
+  from {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+
+  50% {
+    -webkit-transform: scale3d(1.05, 1.05, 1.05);
+    transform: scale3d(1.05, 1.05, 1.05);
+  }
+
+  to {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+@keyframes pulse {
+  from {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+
+  50% {
+    -webkit-transform: scale3d(1.05, 1.05, 1.05);
+    transform: scale3d(1.05, 1.05, 1.05);
+  }
+
+  to {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+.pulse {
+  -webkit-animation-name: pulse;
+  animation-name: pulse;
+}
+
+
+@-webkit-keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.fadeIn {
+  -webkit-animation-name: fadeIn;
+  animation-name: fadeIn;
+}
+
+
+@-webkit-keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+.fadeOut {
+  -webkit-animation-name: fadeOut;
+  animation-name: fadeOut;
+}
+
+@-webkit-keyframes slideInUp {
+  from {
+    -webkit-transform: translate3d(0, 100%, 0);
+    transform: translate3d(0, 100%, 0);
+    visibility: visible;
+  }
+
+  to {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    -webkit-transform: translate3d(0, 100%, 0);
+    transform: translate3d(0, 100%, 0);
+    visibility: visible;
+  }
+
+  to {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.slideInUp {
+  -webkit-animation-name: slideInUp;
+  animation-name: slideInUp;
 }
