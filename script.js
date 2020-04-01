@@ -77,9 +77,8 @@ function startGame() {
 
 function refreshDisplays() {
     //Middle Display: latest card image, latest card info & game status.
-    renderCardInPlay();
+    showLatestCard()
     gameStatusDisplay();
-    showLatestCard();
 
     //Left Display: Current player, next player, and latest action.
     displayLatestMove();
@@ -93,14 +92,18 @@ function refreshDisplays() {
 }
 
 //Depending on the current player, let player know what's happening in the game.
-function gameStatusDisplay() {
+function gameStatusDisplay(winner) {
     var gameStatus = document.getElementById('current-status')
-    if (currentPlayer === playerName) {
+
+    if (winner) {
+      debugger;
+      gameStatus.innerText = `${winner} has won the game! Next round in 5 seconds...`
+      gameStatus.style.animation = "slideInUp 0.5s, pulse 1s infinite 0.5s"
+    } else if (currentPlayer === playerName) {
         gameStatus.innerText = `It's your turn!`
         gameStatus.style.animation = "slideInUp 0.5s, bounce-4 1s infinite 0.5s"
-    } else{
+    } else {
         gameStatus.innerText = `${currentPlayer} is making a move...`
-
         //Animate them in differently according to player.
         if (currentPlayer==="Computer 1") {
           gameStatus.style.animation = "zoomIn 0.5s, pulse 1s infinite 0.5s";
@@ -119,9 +122,10 @@ function showLatestCard() {
 }
 
 //Display latest move (DOM)
-function displayLatestMove() {
+function displayLatestMove(winner) {
     var latestMoveSpan = document.getElementById('latest-move');
     latestMoveSpan.innerText = latestMove;
+
 }
 
 //Display current player (DOM)
@@ -158,6 +162,8 @@ function newGame() {
     generateDeck();
     givePlayersDeck(7);
     refreshDisplays();
+    showLatestCard();
+
 }
 
 //Draw one card from the pile, is only called when user clicks on DRAW button.
@@ -325,6 +331,7 @@ function playThisCard(card, deck) {
     //Move the card from the specified deck to the cardInPlay array.
     cardInPlay.push(card);
     deck.splice(card.indexInDeck, 1)
+    renderCardInPlay();
 
     //Give latest move info.
     latestMove = `${card.color} ${card.value} from ${currentPlayer}`
@@ -358,8 +365,9 @@ function playThisCard(card, deck) {
 
     //If there is a winner, show it on gamestatus, refresh the scoreboard & reset game in 5 seconds.
     if (winner) {
-        latestMove =`${winner} has won! Going to the next round in 5 seconds...`
+      debugger;
         displayLatestMove();
+        gameStatusDisplay(winner);
         refreshScoreboard();
         return setTimeout(newGame, 5000)
         //If there is no winner move on to the next player & refresh displays.
@@ -373,7 +381,6 @@ function playThisCard(card, deck) {
 function checkForComputerMove() {
     //If current player is not the user & currentPlayer is not falsey (ie when there's a winner, currentPlayer = null)
     if (currentPlayer !== playerName && currentPlayer) {
-        computerPlayerIndex = 2
         setTimeout(computerMove, 4000)
     }
 }
@@ -456,6 +463,8 @@ function computerMove() {
     //Assume there is only wild cards at first.
     var onlyWildCards = true;
 
+    console.log(computerDeck.length);
+
     //First reassign an indexInDeck value & track the card colors for all the cards.
     for (var i = 0; i < computerDeck.length; i++) {
         var card = computerDeck[i]
@@ -504,15 +513,12 @@ function computerMove() {
 //If any of the players' arrays are empty, they are a winner.
 function checkWin() {
     if (computer1Deck.length === 0) {
-        currentPlayer = null;
         com1Score++
         return `Computer 1`;
     } else if (computer2Deck.length === 0) {
-        currentPlayer = null;
         com2Score++;
         return `Computer 2`
     } else if (playerDeck.length === 0) {
-        currentPlayer = null;
         userScore++;
         return playerName
     }
